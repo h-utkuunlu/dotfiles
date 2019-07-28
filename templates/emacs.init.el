@@ -4,8 +4,8 @@
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+;;(load "auctex.el" nil t t)
+;;(load "preview-latex.el" nil t t)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
