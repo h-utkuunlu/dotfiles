@@ -1,9 +1,10 @@
 function gitConfig {
     printf "\n${bld}git config...${nrm}\n\n"
     command -v git >/dev/null 2>&1 || {
-	echo >&2 "Git is not installed. Installing git...";
-	echo "running 'sudo apt-get install git'";
-	sudo apt-get install git; }
+	echo >&2 "Git is not installed. Install git first";
+        STATUS=1
+	return 1
+    }
     
     printf " ~/.gitconfig ...\n"
     printf "Original git settings can be found in /home/$USER/.gitconfig~\n"
@@ -13,5 +14,7 @@ function gitConfig {
     git config --global format.pretty oneline
     git config --global color.ui true
     
-    printf "\n${bld}git config done.${nrm}\n\n"    
+    printf "\n${bld}git config done.${nrm}\n\n"
+    STATUS=0
+    return 0
 }

@@ -1,22 +1,25 @@
-#! /bin/bash
+#! /bin/zsh
 
 bld=$(tput bold)
 nrm=$(tput sgr0)
-myemail="dschirita@gmail.com"
+myemail="h.utkuunlu@gmail.com"
 EXITCODE=0
 
 source ./gitconfig.sh
 source ./emacsconfig.sh
-source ./bashconfig.sh
+source ./zshconfig.sh
+source ./tmuxconfig.sh
 
 ################################  MAIN  ################################
 
 printf "\nInitializing configuration...\n"
-
 gitConfig
 emacsConfig    
-bashConfig
+zshConfig
+tmuxConfig
+
+if [ $STATUS -eq 1 ]; then
+    printf "Install the missing software, and rerun the script.\n"
+fi
 
 printf "\nEnvironment configuration script exitting with exit code $EXITCODE.\n"
-
-
