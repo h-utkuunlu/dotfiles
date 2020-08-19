@@ -1,4 +1,8 @@
 function gitConfig {
+
+    #echo ${OSNAME:5} | grep -i arch >/dev/null
+    #if (( $? == 0 )); then; echo hi; fi
+
     printf "\n${bld}git config...${nrm}\n\n"
     command -v git >/dev/null 2>&1 || {
 	echo >&2 "Git is not installed. Install git first";

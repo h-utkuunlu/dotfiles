@@ -4,6 +4,7 @@ bld=$(tput bold)
 nrm=$(tput sgr0)
 myemail="h.utkuunlu@gmail.com"
 EXITCODE=0
+OSNAME=$(head -n1 /etc/os-release)
 
 source ./gitconfig.sh
 source ./emacsconfig.sh

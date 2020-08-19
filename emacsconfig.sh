@@ -7,12 +7,15 @@ function emacsConfig {
 	return 1
     }
 
-    printf "~/.emacs.d/init.el will be replaced with dc config\n"
+    printf "~/.emacs.d/init.el will be replaced with template config\n"
     printf "Original emacs settings can be found in /home/$USER/.emacs.d/init.el~\n"
 
     mkdir -p /home/$USER/.emacs.d
+    mkdir -p /home/$USER/.emacs.d/lisp
+    
     ln -sb $PWD/templates/emacs.init.el /home/$USER/.emacs.d/init.el
-	
+    ln -sb $PWD/templates/modelica-mode.el /home/$USER/.emacs.d/lisp/modelica-mode.el
+    
     printf "\n${bld}emacs config done.${nrm}\n"
     return 0
 }

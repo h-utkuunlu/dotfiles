@@ -128,3 +128,7 @@ don't cause as much overhead."
 (setq TeX-parse-self t)
 (setq TeX-save-query nil)
 
+;; Modelica mode
+(setq load-path (cons "~/.emacs.d/lisp" load-path))
+(autoload 'modelica-mode "modelica-mode" "Modelica Editing Mode" t)
+(setq auto-mode-alist (cons '("\.mo$" . modelica-mode) auto-mode-alist))
