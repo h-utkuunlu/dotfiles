@@ -230,9 +230,6 @@
   (setq python-black-command "/usr/local/bin/black"))
   ;; (setq python-black-extra-args '("--line-length=100")))
 
-;; Function to open a terminal at the current folder location
-(defun gterm ()
-  (interactive "@")
-  (shell-command (concat "gnome-terminal --working-directory="
-            (file-name-directory (or load-file-name buffer-file-name))
-              " > /dev/null 2>&1 & disown") nil nil))
+;; Allows opening terminals in the folder associated with buffer
+(use-package terminal-here
+  :bind ("C-c t" . terminal-here-launch))
