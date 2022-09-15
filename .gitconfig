@@ -1,0 +1,19 @@
+[user]
+    name = Halil Utku Unlu
+    email = h.utkuunlu@gmail.com
+[core]
+    editor = emacs -nw
+[color]
+    ui = true
+[color "grep"]
+    linenumber = yellow bold
+    match = red
+    filename = magenta
+[init]
+    defaultBranch = main
+[format]
+    pretty = oneline
+[push]
+    default = simple
+[submodule]
+    recurse = true
