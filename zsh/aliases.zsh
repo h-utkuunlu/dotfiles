@@ -1,6 +1,5 @@
 # Aliases
 
-alias emacs="emacsclient -c"
 alias open="xdg-open"
 alias sn="shutdown now"
 alias nyuadvpn="sudo openconnect --authgroup nyu-vpn vpn.abudhabi.nyu.edu"
