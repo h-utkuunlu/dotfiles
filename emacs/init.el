@@ -101,18 +101,33 @@
 	bibtex-autokey-titlewords-stretch 1
 	bibtex-autokey-titleword-length 5))
 
-;; Helm mode from LSP Mode tutorials. Makes searches / navigation much easier
-;; Display helm output at the center, in a separate frame
-;; https://www.reddit.com/r/emacs/comments/jj269n/display_helm_frames_in_the_center_of_emacs/
-(use-package helm
+;; Fuzzy search functionality (ivy - counsel - swiper)
+(use-package ivy
   :config
-  (define-key global-map [remap find-file] #'helm-find-files)
-  (define-key global-map [remap execute-extended-command] #'helm-M-x)
-  (define-key global-map [remap switch-to-buffer] #'helm-mini)
-  (helm-mode 1)
-  (helm-autoresize-mode 1))
+  (ivy-mode)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  ;; enable this if you want `swiper' to use it
+  (setq search-default-mode #'char-fold-to-regexp)
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "<f6>") 'ivy-resume)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
-(use-package helm-bibtex
+(use-package counsel
+  :config
+  (counsel-mode)
+  (global-set-key (kbd "C-x l") 'counsel-locate)) ;; By default, C-x l is for page lines
+
+(use-package swiper)
+
+;; Display output in a posframe
+(use-package ivy-posframe
+  :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  (ivy-posframe-mode))
+
+(use-package ivy-bibtex
   :config ;; Obtained from org-ref page
   (setq bibtex-completion-bibliography '("~/cloud/org/references/articles.bib")
 	bibtex-completion-library-path '("~/cloud/org/references/pdfs")
@@ -142,7 +157,9 @@
 ;;   (hl-line ((t (:background "#555555")))))
 
 ;; Magit - Git interface
-(use-package magit)
+(use-package magit
+  :config
+  (global-set-key (kbd "C-c m") 'magit-status))
 
 ;; Comp(lete)any package for completions
 (use-package company
@@ -191,8 +208,8 @@
   :config
   (setq lsp-ui-doc-show-with-cursor t))
 
-(use-package helm-lsp
-  :commands helm-lsp-workspace-symbol)
+(use-package ivy-lsp
+  :commands ivy-lsp-workspace-symbol)
 
 ;; Syntax checking for any code
 (use-package flycheck
