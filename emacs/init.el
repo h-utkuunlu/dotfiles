@@ -187,9 +187,9 @@
 
 ;; Syntax checking for any code
 (use-package flycheck
-  :init
-  (global-flycheck-mode)
-  :hook (python-mode . (flycheck-add-next-checker 'python-pylint 'python-mypy)))
+  :hook ((python-mode . flycheck-mode)
+	 (c-mode . flycheck-mode)
+	 (c++-mode . flycheck-mode)))
 
 ;; Show file structure
 (use-package treemacs
