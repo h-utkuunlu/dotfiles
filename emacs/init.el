@@ -81,7 +81,14 @@
   :custom (straight-use-package-by-default t))
 
 ;; Org mode
-(use-package org)
+(use-package org
+  :hook (org-mode . auto-fill-mode)
+  :config
+  (define-key global-map (kbd "C-c l") 'org-store-link)
+  (define-key global-map (kbd "C-c a") 'org-agenda)
+  (setq org-log-done t)
+  (setq org-agenda-files (list "~/cloud/org/agenda/work.org"
+			       "~/cloud/org/agenda/home.org")))
 
 ;; Bibtex
 (use-package bibtex
@@ -104,9 +111,6 @@
   (define-key global-map [remap switch-to-buffer] #'helm-mini)
   (helm-mode 1)
   (helm-autoresize-mode 1))
-
-(use-package helm-lsp
-  :commands helm-lsp-workspace-symbol)
 
 (use-package helm-bibtex
   :config ;; Obtained from org-ref page
@@ -167,24 +171,33 @@
 ;; Which-key shows available commands after a key press
 (use-package which-key
   :config
-  (which-key-mode 1))
+  (which-key-mode))
 
 ;; Language Server Protocol - comprehending the code & showing potential errors
 (use-package lsp-mode
-  :hook (python-mode c-mode c++-mode)
+  :hook ((python-mode . lsp-mode)
+	 (c-mode-common . lsp-mode))
   :config
-  (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index"))
+  (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++"))
   (setq lsp-clangd-binary-path "/usr/bin/clangd")
   (setq lsp-idle-delay 0.1)
   (setq read-process-output-max (* 1024 1024)) ;; Emacs default (4K) too low for LSP
   (setq gc-cons-threshold (* 100 1024 1024)) ;; Emacs default low for LSP
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (define-key lsp-mode-map (kbd "C-c s") lsp-command-map))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-show-with-cursor t))
+
+(use-package helm-lsp
+  :commands helm-lsp-workspace-symbol)
 
 ;; Syntax checking for any code
 (use-package flycheck
   :hook ((python-mode . flycheck-mode)
-	 (c-mode . flycheck-mode)
-	 (c++-mode . flycheck-mode)))
+	 (c-mode-common . flycheck-mode)))
 
 ;; Show file structure
 (use-package treemacs
