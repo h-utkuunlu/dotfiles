@@ -36,6 +36,9 @@
 (set-fill-column 88)
 (global-display-fill-column-indicator-mode)
 
+;; Suppress comp warnings
+(setq warning-suppress-types '((comp)))
+
 ;; Don't clutter up directories with files~ and #files#
 ;; Backups saved to emacs.d/backup, autosaves to emacs.d/autosave
 (defvar autosave-dir (expand-file-name "~/.emacs.d/autosave/"))
