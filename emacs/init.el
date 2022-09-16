@@ -80,6 +80,20 @@
 (use-package straight
   :custom (straight-use-package-by-default t))
 
+;; Org mode
+(use-package org)
+
+;; Bibtex
+(use-package bibtex
+  :config
+  (setq bibtex-autokey-year-length 4
+	bibtex-autokey-name-year-separator "-"
+	bibtex-autokey-year-title-separator "-"
+	bibtex-autokey-titleword-separator "-"
+	bibtex-autokey-titlewords 2
+	bibtex-autokey-titlewords-stretch 1
+	bibtex-autokey-titleword-length 5))
+
 ;; Helm mode from LSP Mode tutorials. Makes searches / navigation much easier
 ;; Display helm output at the center, in a separate frame
 ;; https://www.reddit.com/r/emacs/comments/jj269n/display_helm_frames_in_the_center_of_emacs/
@@ -94,14 +108,34 @@
 (use-package helm-lsp
   :commands helm-lsp-workspace-symbol)
 
-(use-package helm-xref)
+(use-package helm-bibtex
+  :config ;; Obtained from org-ref page
+  (setq bibtex-completion-bibliography '("~/cloud/org/references/articles.bib")
+	bibtex-completion-library-path '("~/cloud/org/references/pdfs")
+	bibtex-completion-notes-path '("~/cloud/org/references/notes")
+	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+	bibtex-completion-display-formats
+	'((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+	  (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+	  (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	  (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	  (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+	bibtex-completion-pdf-open-function
+	(lambda (fpath)
+	  (call-process "open" nil 0 nil fpath))))
 
-;; Highlights the current line
-(use-package hl-line
-  :init
-  (global-hl-line-mode 1)
-  :custom-face
-  (hl-line ((t (:background "#555555")))))
+;; org-ref to make it easier to track references in emacs org-mode
+(use-package org-ref)
+
+;; Note taking on pdfs in org mode
+(use-package interleave)
+
+;; ;; Highlights the current line
+;; (use-package hl-line
+;;   :init
+;;   (global-hl-line-mode 1)
+;;   :custom-face
+;;   (hl-line ((t (:background "#555555")))))
 
 ;; Magit - Git interface
 (use-package magit)
