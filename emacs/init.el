@@ -159,26 +159,20 @@
 
 ;; Consider adding projectile
 
-;; Clang Format to format c/c++ code
-(defun clang-format-save-hook-for-this-buffer ()
-  "Create a buffer local save hook."
-  (add-hook 'before-save-hook
-            (lambda ()
-              (when (locate-dominating-file "." ".clang-format")
-                (clang-format-buffer))
-              ;; Continue to save.
-              nil)
-            nil
-            ;; Buffer local hook.
-            t))
+;; Use google c-style
+(use-package google-c-style
+  :hook (c-mode-common . google-set-c-style))
 
+;; Clang Format to format c/c++ code
 (use-package clang-format
   :init
   (setq clang-format-style "file")
-  (setq clang-format-fallback-style "google")
+  (setq clang-format-fallback-style "llvm")
   :config
-  (add-hook 'c-mode-hook (lambda () (clang-format-save-hook-for-this-buffer)))
-  (add-hook 'c++-mode-hook (lambda () (clang-format-save-hook-for-this-buffer))))
+  (add-hook 'c-common-mode-hook
+	    (lambda ()
+	      (add-hook (make-local-variable 'before-save-hook)
+			'clang-format-buffer))))
 
 ;; Python LSP interface
 (use-package lsp-jedi)
