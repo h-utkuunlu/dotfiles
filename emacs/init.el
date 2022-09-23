@@ -62,7 +62,7 @@
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el"
-       user-emacs-directory))
+			 user-emacs-directory))
       (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -227,8 +227,12 @@
 
 ;; Show file structure
 (use-package treemacs
+  :bind
+  (:map global-map
+	([f8] . treemacs)  ;; Open / close treemacs
+	("C-<f8>" . treemacs-select-window))  ;; Switch to the side window
   :config
-  (setq treemacs-space-between-root-nodes nil))
+  (setq treemacs-is-never-other-window t))  ;; C-x o does not include treemacs window
 
 ;; Consider adding projectile
 
@@ -256,7 +260,7 @@
   :hook (python-mode . python-black-on-save-mode)
   :config
   (setq python-black-command "/usr/local/bin/black"))
-  ;; (setq python-black-extra-args '("--line-length=100")))
+;; (setq python-black-extra-args '("--line-length=100")))
 
 ;; Allows opening terminals in the folder associated with buffer
 (use-package terminal-here
