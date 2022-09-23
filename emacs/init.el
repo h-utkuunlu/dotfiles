@@ -198,6 +198,8 @@
   :hook ((python-mode . lsp-mode)
 	 (c-mode-common . lsp-mode))
   :config
+  ;; query-driver option fetches the compilation symbols from the used compiler
+  ;; (No need to retain 2 copies of standard libraries if using gcc)
   (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++"))
   (setq lsp-clangd-binary-path "/usr/bin/clangd")
   (setq lsp-idle-delay 0.1)
@@ -205,6 +207,9 @@
   (setq gc-cons-threshold (* 100 1024 1024)) ;; Emacs default low for LSP
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (define-key lsp-mode-map (kbd "C-c s") lsp-command-map))
+
+;; Python LSP interface
+(use-package lsp-jedi)
 
 (use-package lsp-ui
   :commands lsp-ui-mode
@@ -219,6 +224,11 @@
   :hook ((python-mode . flycheck-mode)
 	 (c-mode-common . flycheck-mode)))
 
+;; Formatting code
+;; Install externally to run formatting on:
+;; - C/C++ - clang-format
+;; - Python - black
+;; - HTML/XML - tidy
 ;; Formatter for many programming languages
 (use-package format-all
   :bind ("C-c f" . format-all-buffer)
@@ -257,17 +267,6 @@
 	    (lambda ()
 	      (add-hook (make-local-variable 'before-save-hook)
 			'clang-format-buffer))))
-
-;; Python LSP interface
-(use-package lsp-jedi)
-
-;; Python Black formatter
-(use-package python-black
-  :after python
-  :hook (python-mode . python-black-on-save-mode)
-  :config
-  (setq python-black-command "/usr/local/bin/black"))
-;; (setq python-black-extra-args '("--line-length=100")))
 
 ;; Allows opening terminals in the folder associated with buffer
 (use-package terminal-here
