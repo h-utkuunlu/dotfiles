@@ -280,8 +280,4 @@
 ;; Set theme the last (So that errors are caught)
 (use-package color-theme-sanityinc-tomorrow
   :config
-  (color-theme-sanityinc-tomorrow-bright)
-  ;; Last two needed for emacs
-  '(custom-enabled-themes '(sanityinc-tomorrow-bright))
-  '(custom-safe-themes
-    '("1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
+  (load-theme 'sanityinc-tomorrow-bright t))
