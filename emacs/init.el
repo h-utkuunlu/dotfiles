@@ -234,7 +234,14 @@
   :config
   (setq treemacs-is-never-other-window t))  ;; C-x o does not include treemacs window
 
-;; Consider adding projectile
+;; Projectile - project interaction library to access files / buffers
+(use-package projectile)
+
+;; Counsel (Ivy) projectile integration
+(use-package counsel-projectile
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (counsel-projectile-mode))
 
 ;; Use google c-style
 (use-package google-c-style
