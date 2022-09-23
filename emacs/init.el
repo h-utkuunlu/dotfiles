@@ -79,7 +79,7 @@
 
 ;; Org mode
 (use-package org
-  :hook (org-mode . auto-fill-mode)
+  :hook (org-mode . auto-fill-mode)  ;; Adjust the text length
   :config
   (define-key global-map (kbd "C-c l") 'org-store-link)
   (define-key global-map (kbd "C-c a") 'org-agenda)
@@ -145,13 +145,6 @@
 
 ;; Note taking on pdfs in org mode
 (use-package interleave)
-
-;; ;; Highlights the current line
-;; (use-package hl-line
-;;   :init
-;;   (global-hl-line-mode 1)
-;;   :custom-face
-;;   (hl-line ((t (:background "#555555")))))
 
 ;; Magit - Git interface
 (use-package magit
@@ -275,6 +268,14 @@
 ;; Ace window - easier window navigation
 (use-package ace-window
   :bind ("M-o" . ace-window))
+
+;; Text folding for easier code navigation
+(use-package origami
+  :bind
+  (:map origami-mode-map
+	("<tab>" . origami-recursively-toggle-node)
+	("<backtab>" . origami-toggle-all-nodes))
+  :hook (prog-mode . origami-mode))
 
 ;; Set theme the last (So that errors are caught)
 (use-package color-theme-sanityinc-tomorrow
