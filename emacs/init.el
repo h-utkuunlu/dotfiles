@@ -33,7 +33,7 @@
 (load-theme 'misterioso t)
 
 ;; Display 88-col fill indicator (following python black)
-(set-fill-column 88)
+(setq-default fill-column 88)
 (global-display-fill-column-indicator-mode)
 
 ;; Suppress comp warnings
@@ -185,6 +185,9 @@
 ;; Support for Dockerfile syntax
 (use-package dockerfile-mode)
 
+;; Support for cmake syntax
+(use-package cmake-mode)
+
 ;; Which-key shows available commands after a key press
 (use-package which-key
   :config
@@ -208,13 +211,19 @@
   :config
   (setq lsp-ui-doc-show-with-cursor t))
 
-(use-package ivy-lsp
-  :commands ivy-lsp-workspace-symbol)
+(use-package lsp-ivy
+  :commands lsp-ivy-workspace-symbol)
 
 ;; Syntax checking for any code
 (use-package flycheck
   :hook ((python-mode . flycheck-mode)
 	 (c-mode-common . flycheck-mode)))
+
+;; Formatter for many programming languages
+(use-package format-all
+  :bind ("C-c f" . format-all-buffer)
+  :hook ((prog-mode . format-all-mode)
+	 (format-all-mode . format-all-ensure-formatter)))
 
 ;; Show file structure
 (use-package treemacs
