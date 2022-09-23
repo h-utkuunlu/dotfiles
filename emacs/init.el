@@ -29,9 +29,6 @@
 ;; Use clipboard
 (setq select-enable-clipboard t)
 
-;; Set theme
-(load-theme 'misterioso t)
-
 ;; Display 88-col fill indicator (following python black)
 (setq-default fill-column 88)
 (global-display-fill-column-indicator-mode)
@@ -274,3 +271,16 @@
 ;; Allows opening terminals in the folder associated with buffer
 (use-package terminal-here
   :bind ("C-c t" . terminal-here-launch))
+
+;; Ace window - easier window navigation
+(use-package ace-window
+  :bind ("M-o" . ace-window))
+
+;; Set theme the last (So that errors are caught)
+(use-package color-theme-sanityinc-tomorrow
+  :config
+  (color-theme-sanityinc-tomorrow-bright)
+  ;; Last two needed for emacs
+  '(custom-enabled-themes '(sanityinc-tomorrow-bright))
+  '(custom-safe-themes
+    '("1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
