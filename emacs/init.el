@@ -253,6 +253,9 @@
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (counsel-projectile-mode))
 
+;; Treemacs - projectile integration
+(use-package treemacs-projectile)
+
 ;; Use google c-style
 (use-package google-c-style
   :hook (c-mode-common . google-set-c-style))
