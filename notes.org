@@ -1,0 +1,12 @@
+* Notes on the setup
+
+** nvidia gpu
+
+If an nvidia gpu is present and you want to configure TLP to optimize / only use intel
+mode:
+0. Check [[https://linrunner.de/tlp/faq/powercon.html#hybrid-graphics][this page from TLP settings]]
+1. install nvidia-prime
+2. Run "sudo prime-select intel"
+3. Reboot
+
+nvidia-smi should print something along the lines of "cannot run"
