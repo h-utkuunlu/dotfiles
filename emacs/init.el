@@ -17,7 +17,7 @@
 (show-paren-mode 1)
 
 ;; Show line / column numbers
-(global-linum-mode 1)
+;; (global-linum-mode 1) ;; Doesn't work well with pdf-tools
 (column-number-mode 1)
 
 ;; Wrap line around
@@ -159,6 +159,17 @@
   (setq company-idle-delay 0.0)
   (setq company-minimum-prefix-length 1))
 
+;; Prescient - different, predictive sorting / finding algorithm
+(use-package prescient)
+
+(use-package ivy-prescient
+  :config
+  (ivy-prescient-mode))
+
+(use-package company-prescient
+  :config
+  (company-prescient-mode))
+
 ;; Yasnippet provides easy insertion of boilerplate snippets
 (use-package yasnippet
   :init
@@ -273,9 +284,12 @@
 (use-package origami
   :bind
   (:map origami-mode-map
-	("<tab>" . origami-recursively-toggle-node)
-	("<backtab>" . origami-toggle-all-nodes))
+	("<backtab>" . origami-recursively-toggle-node)
+	("C-<tab>" . origami-toggle-all-nodes))
   :hook (prog-mode . origami-mode))
+
+;; Prog-mode hooks to enable line display only during programming
+(add-hook 'prog-mode-hook 'linum-mode)
 
 ;; Set theme the last (So that errors are caught)
 (use-package color-theme-sanityinc-tomorrow
