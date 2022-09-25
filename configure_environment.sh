@@ -98,6 +98,12 @@ emacsclient -e "(kill-emacs)"
 print_emph "** Configuring clang-format **"
 ln -sb $PWD/.clang-format $HOME/.clang-format
 
+##### tlp #####
+print_emph "** Configuring tlp **"
+print_warn "tlp installation is not checked. If installed afterwards, these settings may be overridden"
+sudo cp /etc/tlp.conf $PWD/tlp.conf.bcp
+sudo ln -sb $PWD/tlp.conf /etc/tlp.conf
+
 # Done!
 drawline
 print_success "Environment setup is complete!"
