@@ -127,8 +127,8 @@
 (use-package ivy-bibtex
   :config ;; Obtained from org-ref page
   (setq bibtex-completion-bibliography '("~/cloud/org/references/articles.bib")
-	bibtex-completion-library-path '("~/cloud/org/references/pdfs")
-	bibtex-completion-notes-path '("~/cloud/org/references/notes")
+	bibtex-completion-library-path '("~/cloud/org/references/pdfs/")
+	bibtex-completion-notes-path '("~/cloud/org/references/notes/")
 	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
 	bibtex-completion-display-formats
 	'((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
@@ -139,6 +139,9 @@
 	bibtex-completion-pdf-open-function
 	(lambda (fpath)
 	  (call-process "open" nil 0 nil fpath))))
+
+;; async is a dependency for org-ref to be able to download files asynchronously
+(use-package async)
 
 ;; org-ref to make it easier to track references in emacs org-mode
 (use-package org-ref)
