@@ -204,7 +204,9 @@ With a prefix ARG, remove start location."
   (setq company-minimum-prefix-length 1))
 
 ;; Prescient - different, predictive sorting / finding algorithm
-(use-package prescient)
+(use-package prescient
+  :config
+  (prescient-persist-mode))
 
 (use-package ivy-prescient
   :config
