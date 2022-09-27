@@ -141,7 +141,10 @@
 (use-package async)
 
 ;; org-ref to make it easier to track references in emacs org-mode
-(use-package org-ref)
+(use-package org-ref
+  :bind
+  (:map org-mode-map
+	("C-c ]" . org-ref-insert-link)))
 
 ;; pdf-tools for better pdf management / viewing
 (use-package pdf-tools
