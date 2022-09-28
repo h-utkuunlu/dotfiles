@@ -151,6 +151,7 @@
 	("C-c ]" . org-ref-insert-link)))
 
 ;; pdf-tools for better pdf management / viewing
+;; hook: see https://github.com/vedang/pdf-tools#display-line-numbers-mode
 (use-package pdf-tools
   :hook
   ((pdf-view-mode . (lambda ()
