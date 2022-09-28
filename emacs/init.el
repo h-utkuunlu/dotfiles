@@ -17,7 +17,7 @@
 (show-paren-mode 1)
 
 ;; Show line / column numbers
-;; (global-linum-mode 1) ;; Doesn't work well with pdf-tools
+(global-display-line-numbers-mode 1)
 (column-number-mode 1)
 
 ;; Wrap line around
@@ -152,6 +152,9 @@
 
 ;; pdf-tools for better pdf management / viewing
 (use-package pdf-tools
+  :hook
+  ((pdf-view-mode . (lambda ()
+		      (display-line-numbers-mode -1))))
   :config
   (pdf-tools-install))
 
@@ -340,9 +343,6 @@ With a prefix ARG, remove start location."
 	("<backtab>" . origami-recursively-toggle-node)
 	("C-<tab>" . origami-toggle-all-nodes))
   :hook (prog-mode . origami-mode))
-
-;; Prog-mode hooks to enable line display only during programming
-(add-hook 'prog-mode-hook 'linum-mode)
 
 ;; Set theme the last (So that errors are caught)
 (use-package color-theme-sanityinc-tomorrow
