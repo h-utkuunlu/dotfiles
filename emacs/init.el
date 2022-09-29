@@ -78,6 +78,7 @@
   :custom (straight-use-package-by-default t))
 
 ;; Org mode
+;; Check https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html for GTD
 (use-package org
   :hook (org-mode . auto-fill-mode)  ;; Adjust the text length
   :config
