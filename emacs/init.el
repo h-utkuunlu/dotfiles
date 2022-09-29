@@ -344,6 +344,9 @@ With a prefix ARG, remove start location."
 	("C-<tab>" . origami-toggle-all-nodes))
   :hook (prog-mode . origami-mode))
 
+;; ;; Small overview of the code on the side (Deactivated. Didn't find it too useful)
+;; (use-package minimap)
+
 ;; Set theme the last (So that errors are caught)
 (use-package color-theme-sanityinc-tomorrow
   :config
