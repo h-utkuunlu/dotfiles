@@ -127,8 +127,7 @@
 (use-package ivy-bibtex
   :bind
   (:map global-map
-	("C-c i" . ivy-bibtex)
-	("C-c r" . ivy-resume))
+	("C-c i" . ivy-bibtex))
   :config ;; Obtained from org-ref page
   (setq bibtex-completion-bibliography '("~/cloud/org/references/articles.bib")
 	bibtex-completion-library-path '("~/cloud/org/references/pdfs/")
