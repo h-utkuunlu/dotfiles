@@ -148,7 +148,9 @@
 (use-package org-ref
   :bind
   (:map org-mode-map
-	("C-c ]" . org-ref-insert-link)))
+	("C-c ]" . org-ref-insert-link))
+  (:map bibtex-mode-map
+	("C-c ]" . doi-utils-add-entry-from-crossref-query)))
 
 ;; pdf-tools for better pdf management / viewing
 ;; hook: see https://github.com/vedang/pdf-tools#display-line-numbers-mode
