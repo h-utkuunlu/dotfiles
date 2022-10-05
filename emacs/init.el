@@ -364,6 +364,17 @@ With a prefix ARG, remove start location."
 ;; ;; Small overview of the code on the side (Deactivated. Didn't find it too useful)
 ;; (use-package minimap)
 
+;; Ask for confirmation when using C-c C-x to kill a session
+(defun ask-before-closing ()
+  "Close only if y was pressed."
+  (interactive)
+  (if (y-or-n-p (format "Are you sure you want to close this frame? "))
+      (save-buffers-kill-emacs)
+    (message "Canceled frame close")))
+
+(when (daemonp)
+  (global-set-key (kbd "C-x C-c") 'ask-before-closing))
+
 ;; Set theme the last (So that errors are caught)
 (use-package color-theme-sanityinc-tomorrow
   :config
