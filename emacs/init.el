@@ -86,7 +86,21 @@
   (define-key global-map (kbd "C-c a") 'org-agenda)
   (setq org-log-done t)
   (setq org-agenda-files (list "~/cloud/org/agenda/work.org"
-			       "~/cloud/org/agenda/home.org")))
+			       "~/cloud/org/agenda/home.org"
+			       "~/cloud/org/gtd/inbox.org"
+			       "~/cloud/org/gtd/gtd.org"
+			       "~/cloud/org/gtd/tickler.org"))
+  (setq org-capture-templates '(("t" "Todo [inbox]" entry
+				 (file+headline "~/cloud/org/gtd/inbox.org" "Tasks")
+				 "* TODO %i%?")
+				("T" "Tickler" entry
+				 (file+headline "~/cloud/org/gtd/tickler.org" "Tickler")
+				 "* %i%? \n %U")))
+  (setq org-refile-targets '(("~/cloud/org/gtd/gtd.org" :maxlevel . 3)
+                             ("~/cloud/org/gtd/someday.org" :level . 1)
+                             ("~/cloud/org/gtd/tickler.org" :maxlevel . 2)))
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  )
 
 ;; Bibtex
 (use-package bibtex
