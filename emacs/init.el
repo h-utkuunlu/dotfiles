@@ -127,9 +127,11 @@
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
 (use-package counsel
+  :bind
+  (:map global-map
+	("C-x l" . counsel-locate)) ;; By default, C-x l is for page lines
   :config
-  (counsel-mode)
-  (global-set-key (kbd "C-x l") 'counsel-locate)) ;; By default, C-x l is for page lines
+  (counsel-mode))
 
 (use-package swiper)
 
@@ -163,8 +165,8 @@
   :bind
   (:map org-mode-map
 	("C-c ]" . org-ref-insert-link))
-  (:map bibtex-mode-map
-	("C-c ]" . doi-utils-add-entry-from-crossref-query)))
+  (:map global-map
+	("C-c ;" . doi-utils-add-entry-from-crossref-query)))
 
 ;; pdf-tools for better pdf management / viewing
 ;; hook: see https://github.com/vedang/pdf-tools#display-line-numbers-mode
