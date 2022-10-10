@@ -80,10 +80,13 @@
 ;; Org mode
 ;; Check https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html for GTD
 (use-package org
+  :bind
+  (:map global-map
+	("C-c l" . org-store-link)
+	("C-c a" . org-agenda)
+	("C-c c" . org-capture))
   :hook (org-mode . auto-fill-mode)  ;; Adjust the text length
   :config
-  (define-key global-map (kbd "C-c l") 'org-store-link)
-  (define-key global-map (kbd "C-c a") 'org-agenda)
   (setq org-log-done t)
   (setq org-agenda-files (list "~/cloud/org/agenda/work.org"
 			       "~/cloud/org/agenda/home.org"
@@ -115,16 +118,19 @@
 
 ;; Fuzzy search functionality (ivy - counsel - swiper)
 (use-package ivy
+  :bind
+  (:map global-map
+	("C-s" . swiper)
+	("C-c C-r" . ivy-resume)
+	("<f6>" . ivy-resume))
+  (:map minibuffer-local-map
+	("C-r" . counsel-minibuffer-history))
   :config
   (ivy-mode)
   (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
   ;; enable this if you want `swiper' to use it
   ;; (setq search-default-mode #'char-fold-to-regexp)  ;; Doesn't work with swiper & prescient together
-  (global-set-key (kbd "C-s") 'swiper)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  (global-set-key (kbd "<f6>") 'ivy-resume)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+  (setq enable-recursive-minibuffers t))
 
 (use-package counsel
   :bind
@@ -271,6 +277,9 @@ With a prefix ARG, remove start location."
 
 ;; Language Server Protocol - comprehending the code & showing potential errors
 (use-package lsp-mode
+  :bind
+  (:map lsp-mode-map
+	("C-c s" . lsp-command-map))
   :hook ((python-mode . lsp-mode)
 	 (c-mode-common . lsp-mode))
   :config
@@ -281,8 +290,7 @@ With a prefix ARG, remove start location."
   (setq lsp-idle-delay 0.1)
   (setq read-process-output-max (* 1024 1024)) ;; Emacs default (4K) too low for LSP
   (setq gc-cons-threshold (* 100 1024 1024)) ;; Emacs default low for LSP
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (define-key lsp-mode-map (kbd "C-c s") lsp-command-map))
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 ;; Python LSP interface
 (use-package lsp-jedi)
@@ -325,8 +333,10 @@ With a prefix ARG, remove start location."
 
 ;; Counsel (Ivy) projectile integration
 (use-package counsel-projectile
+  :bind
+  (:map projectile-mode-map
+	("C-c p" . projectile-command-map))
   :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (counsel-projectile-mode))
 
 ;; Treemacs - projectile integration
