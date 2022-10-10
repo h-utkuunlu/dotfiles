@@ -123,6 +123,8 @@
 	("C-s" . swiper)
 	("C-c C-r" . ivy-resume)
 	("<f6>" . ivy-resume))
+  (:map ivy-minibuffer-map
+	("<return>" . ivy-alt-done))
   (:map minibuffer-local-map
 	("C-r" . counsel-minibuffer-history))
   :config
