@@ -98,12 +98,15 @@
 				 "* TODO %i%?")
 				("T" "Tickler" entry
 				 (file+headline "~/cloud/org/gtd/tickler.org" "Tickler")
-				 "* %i%? \n %U")))
+				 "* %i%? \n %U")
+				("n" "Note" item
+				 (file+headline "~/cloud/org/notes/notes.org" "Notes (Uncategorized)")
+				 "- %?" :empty-lines-before 1))
+	)
   (setq org-refile-targets '(("~/cloud/org/gtd/gtd.org" :maxlevel . 3)
                              ("~/cloud/org/gtd/someday.org" :level . 1)
                              ("~/cloud/org/gtd/tickler.org" :maxlevel . 2)))
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-  )
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
 
 ;; Bibtex
 (use-package bibtex
