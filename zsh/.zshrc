@@ -68,6 +68,10 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# Increase histsize
+export HISTSIZE=1000000
+export SAVEHIST=1000000
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
