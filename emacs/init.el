@@ -348,17 +348,6 @@ With a prefix ARG, remove start location."
 (use-package google-c-style
   :hook (c-mode-common . google-set-c-style))
 
-;; Clang Format to format c/c++ code
-(use-package clang-format
-  :init
-  (setq clang-format-style "file")
-  (setq clang-format-fallback-style "llvm")
-  :config
-  (add-hook 'c-common-mode-hook
-	    (lambda ()
-	      (add-hook (make-local-variable 'before-save-hook)
-			'clang-format-buffer))))
-
 ;; Allows opening terminals in the folder associated with buffer
 (use-package terminal-here
   :bind ("C-c t" . terminal-here-launch))
