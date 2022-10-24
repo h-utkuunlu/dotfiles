@@ -318,7 +318,9 @@ With a prefix ARG, remove start location."
 ;; Formatter for many programming languages
 (use-package format-all
   :bind ("C-c f" . format-all-buffer)
-  :hook ((prog-mode . format-all-mode)
+  :hook ((prog-mode . (lambda ()
+			(unless (eq major-mode 'csharp-mode)
+			  (format-all-mode 1))))
 	 (format-all-mode . format-all-ensure-formatter)))
 
 ;; Show file structure
@@ -366,6 +368,12 @@ With a prefix ARG, remove start location."
 
 ;; ;; Small overview of the code on the side (Deactivated. Didn't find it too useful)
 ;; (use-package minimap)
+
+;; C# support
+(use-package csharp-mode)
+
+;; GLSL support
+(use-package glsl-mode)
 
 ;; Ask for confirmation when using C-c C-x to kill a session
 (defun ask-before-closing ()
