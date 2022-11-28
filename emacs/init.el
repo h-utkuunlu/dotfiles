@@ -140,7 +140,8 @@
 (use-package counsel
   :bind
   (:map global-map
-	("C-x l" . counsel-locate)) ;; By default, C-x l is for page lines
+	("C-x l" . counsel-locate) ;; By default, C-x l is for page lines
+	("M-x" . counsel-M-x))
   :config
   (counsel-mode))
 
@@ -153,6 +154,7 @@
   (ivy-posframe-mode))
 
 (use-package ivy-bibtex
+  :demand t
   :bind
   (:map global-map
 	("C-c i" . ivy-bibtex))
