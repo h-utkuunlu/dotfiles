@@ -186,7 +186,8 @@
 (use-package pdf-tools
   :hook
   ((pdf-view-mode . (lambda ()
-		      (display-line-numbers-mode -1))))
+		      (display-line-numbers-mode -1)
+		      (setq pdf-view-display-size 'fit-page))))
   :config
   (pdf-tools-install))
 
