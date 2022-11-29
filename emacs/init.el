@@ -194,7 +194,9 @@
 ;; additional setup obtained from https://github.com/fuxialexander/org-pdftools
 (use-package org-noter
   :config
-  (setq org-noter-notes-search-path '("~/cloud/org/references/notes/")))
+  (setq org-noter-notes-search-path '("~/cloud/org/references/notes/")
+	org-noter-always-create-frame nil
+	org-noter-kill-frame-at-session-end nil))
 
 (use-package org-pdftools
   :hook (org-mode . org-pdftools-setup-link))
