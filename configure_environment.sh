@@ -94,6 +94,10 @@ ln -sb $PWD/emacs/early-init.el $HOME/.emacs.d/early-init.el
 emacs --daemon
 emacsclient -e "(kill-emacs)"
 
+##### qtile #####
+backup_file $HOME/.config/qtile/config.py
+ln -sb $PWD/qtile_config.py $HOME/.config/qtile/config.py 
+
 ##### clangd-format #####
 print_emph "** Configuring clang-format **"
 ln -sb $PWD/.clang-format $HOME/.clang-format
