@@ -168,6 +168,7 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.WindowName(),
+                widget.Notify(format="📟 {}"),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
@@ -178,15 +179,15 @@ screens = [
                 widget.Memory(
                     background=colors["color6"],
                     measure_mem="G",
-                    format=" {MemUsed:.1f}/{MemTotal:.1f}{mm} ",
+                    format="🖥 {MemUsed:.1f}/{MemTotal:.1f}{mm} ",
                 ),
                 widget.CPU(
-                    format=" {freq_current}GHz {load_percent}% ",
+                    format="🧮 {freq_current}GHz {load_percent}% ",
                 ),
                 widget.Clock(
-                    background=colors["color6"], format=" %Y-%m-%d %a %I:%M %p "
+                    background=colors["color6"], format="🗓 %Y-%m-%d %a %I:%M %p "
                 ),
-                widget.QuickExit(),
+                widget.Volume(emoji=True, format="{}"),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
