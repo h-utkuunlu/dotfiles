@@ -104,12 +104,70 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    # Fullscreen toggle
+    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
+    # Media keys
+    Key(
+        [],
+        "XF86AudioRaiseVolume",
+        lazy.widget["volume"].increase_vol(),
+        desc="Increase volume",
+    ),
+    Key(
+        [],
+        "XF86AudioLowerVolume",
+        lazy.widget["volume"].decrease_vol(),
+        desc="Decrease volume",
+    ),
+    Key(
+        [],
+        "XF86AudioMute",
+        lazy.widget["volume"].mute(),
+        desc="Mute / unmute",
+    ),
+    # TTY
+    Key(
+        ["control", "mod1"],
+        "F1",
+        lazy.core.change_vt(1),
+        desc="Go to virtual console 1",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F2",
+        lazy.core.change_vt(2),
+        desc="Go to virtual console 2",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F3",
+        lazy.core.change_vt(3),
+        desc="Go to virtual console 3",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F4",
+        lazy.core.change_vt(4),
+        desc="Go to virtual console 4",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F5",
+        lazy.core.change_vt(5),
+        desc="Go to virtual console 5",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F6",
+        lazy.core.change_vt(6),
+        desc="Go to virtual console 6",
+    ),
 ]
 
 # Group management
-group_keys = ["1", "2", "3", "4"]
-group_names = ["HOME", "TERM", "EMACS", "WWW"]
-groups = [Group(i) for i in group_names]
+group_keys = ["1", "2", "3", "4", "5", "6"]
+group_names = ["HOME", "TERM", "EMACS", "WWW", "MUSIC", "STEAM"]
+groups = [Group(name) for idx, name in enumerate(group_names)]
 
 for i, group in enumerate(groups):
     keys.extend(
@@ -176,13 +234,16 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Systray(),
+                widget.CurrentLayout(
+                    fmt=" 📚 {} ",
+                ),
                 widget.Memory(
                     background=colors["color6"],
                     measure_mem="G",
-                    format="🖥 {MemUsed:.1f}/{MemTotal:.1f}{mm} ",
+                    format=" 🐏 {MemUsed:.1f}/{MemTotal:.1f}{mm} ",
                 ),
                 widget.CPU(
-                    format="🧮 {freq_current}GHz {load_percent}% ",
+                    format=" 🧮 {freq_current}GHz {load_percent}% ",
                 ),
                 widget.Clock(
                     background=colors["color6"], format="🗓 %Y-%m-%d %a %I:%M %p "
