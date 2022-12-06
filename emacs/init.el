@@ -88,24 +88,24 @@
   :hook (org-mode . auto-fill-mode)  ;; Adjust the text length
   :config
   (setq org-log-done t)
-  (setq org-agenda-files (list "~/cloud/org/agenda/work.org"
-			       "~/cloud/org/agenda/home.org"
-			       "~/cloud/org/gtd/inbox.org"
-			       "~/cloud/org/gtd/gtd.org"
-			       "~/cloud/org/gtd/tickler.org"))
+  (setq org-agenda-files (list "~/Documents/syncthing-cloud/org/agenda/work.org"
+			       "~/Documents/syncthing-cloud/org/agenda/home.org"
+			       "~/Documents/syncthing-cloud/org/gtd/inbox.org"
+			       "~/Documents/syncthing-cloud/org/gtd/gtd.org"
+			       "~/Documents/syncthing-cloud/org/gtd/tickler.org"))
   (setq org-capture-templates '(("t" "Todo [inbox]" entry
-				 (file+headline "~/cloud/org/gtd/inbox.org" "Tasks")
+				 (file+headline "~/Documents/syncthing-cloud/org/gtd/inbox.org" "Tasks")
 				 "* TODO %i%?")
 				("T" "Tickler" entry
-				 (file+headline "~/cloud/org/gtd/tickler.org" "Tickler")
+				 (file+headline "~/Documents/syncthing-cloud/org/gtd/tickler.org" "Tickler")
 				 "* %i%? \n %U")
 				("n" "Note" item
-				 (file+headline "~/cloud/org/notes/notes.org" "Notes (Uncategorized)")
+				 (file+headline "~/Documents/syncthing-cloud/org/notes/notes.org" "Notes (Uncategorized)")
 				 "- %?" :empty-lines-before 1))
 	)
-  (setq org-refile-targets '(("~/cloud/org/gtd/gtd.org" :maxlevel . 3)
-                             ("~/cloud/org/gtd/someday.org" :level . 1)
-                             ("~/cloud/org/gtd/tickler.org" :maxlevel . 2)))
+  (setq org-refile-targets '(("~/Documents/syncthing-cloud/org/gtd/gtd.org" :maxlevel . 3)
+                             ("~/Documents/syncthing-cloud/org/gtd/someday.org" :level . 1)
+                             ("~/Documents/syncthing-cloud/org/gtd/tickler.org" :maxlevel . 2)))
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
 
 ;; Bibtex
@@ -159,9 +159,9 @@
   (:map global-map
 	("C-c i" . ivy-bibtex))
   :config ;; Obtained from org-ref page
-  (setq bibtex-completion-bibliography '("~/cloud/org/references/articles.bib")
-	bibtex-completion-library-path '("~/cloud/org/references/pdfs/")
-	bibtex-completion-notes-path "~/cloud/org/references/notes/"
+  (setq bibtex-completion-bibliography '("~/Documents/syncthing-cloud/org/references/articles.bib")
+	bibtex-completion-library-path '("~/Documents/syncthing-cloud/org/references/pdfs/")
+	bibtex-completion-notes-path "~/Documents/syncthing-cloud/org/references/notes/"
 	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
 	bibtex-completion-display-formats
 	'((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
@@ -195,7 +195,7 @@
 ;; additional setup obtained from https://github.com/fuxialexander/org-pdftools
 (use-package org-noter
   :config
-  (setq org-noter-notes-search-path '("~/cloud/org/references/notes/")
+  (setq org-noter-notes-search-path '("~/Documents/syncthing-cloud/org/references/notes/")
 	org-noter-always-create-frame nil
 	org-noter-kill-frame-at-session-end nil))
 
