@@ -399,6 +399,16 @@ With a prefix ARG, remove start location."
 (when (daemonp)
   (global-set-key (kbd "C-x C-c") 'ask-before-closing))
 
+;; Hide scratch buffer when opening emacs
+(add-hook 'emacs-startup-hook (lambda ()
+                                (when (get-buffer-window "*scratch*")
+                                  (bury-buffer "*scratch*"))))
+
+;; Show agenda as the first thing
+(setq initial-buffer-choice (lambda ()
+			      (org-agenda-list)
+			      (get-buffer "*Org Agenda*")))
+
 ;; Set theme the last (So that errors are caught)
 (use-package color-theme-sanityinc-tomorrow
   :config
