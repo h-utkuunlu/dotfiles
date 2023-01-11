@@ -82,7 +82,8 @@
 (use-package org
   :bind
   (:map global-map
-	("C-c l" . org-store-link)
+	("C-c s" . org-store-link)
+	("C-c C-s" . org-insert-link)
 	("C-c a" . org-agenda)
 	("C-c c" . org-capture))
   :hook (org-mode . auto-fill-mode)  ;; Adjust the text length
@@ -287,11 +288,13 @@ With a prefix ARG, remove start location."
 
 ;; Language Server Protocol - comprehending the code & showing potential errors
 (use-package lsp-mode
-  :bind
-  (:map lsp-mode-map
-	("C-c s" . lsp-command-map))
+  :bind-keymap
+  ("C-c l" . lsp-command-map)
   :hook ((python-mode . lsp-mode)
-	 (c-mode-common . lsp-mode))
+	 (c-mode-common . lsp-mode)
+	 (lsp-mode . (lambda ()
+                       (let ((lsp-keymap-prefix "C-c l"))
+                         (lsp-enable-which-key-integration)))))
   :config
   ;; query-driver option fetches the compilation symbols from the used compiler
   ;; (No need to retain 2 copies of standard libraries if using gcc)
@@ -299,8 +302,7 @@ With a prefix ARG, remove start location."
   (setq lsp-clangd-binary-path "/usr/bin/clangd")
   (setq lsp-idle-delay 0.1)
   (setq read-process-output-max (* 1024 1024)) ;; Emacs default (4K) too low for LSP
-  (setq gc-cons-threshold (* 100 1024 1024)) ;; Emacs default low for LSP
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+  (setq gc-cons-threshold (* 100 1024 1024))) ;; Emacs default low for LSP
 
 ;; Python LSP interface
 (use-package lsp-jedi)
