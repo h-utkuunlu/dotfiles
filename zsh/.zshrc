@@ -44,10 +44,10 @@ source $ZSH/oh-my-zsh.sh
 source /opt/ros/noetic/setup.zsh
 export PATH=$HOME/.local/bin:$PATH
 
-
 # Increase histsize
 export HISTSIZE=1000000
 export SAVEHIST=1000000
 
-# Additional sourcing
-export LD_LIBRARY_CONFIG=$HOME/.local/lib:/usr/local/lib:$LD_LIBRARY_CONFIG
+# Set environment variables to include .local folders
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib:/usr/local/lib
+export CPATH=$HOME/.local/include:$CPATH
