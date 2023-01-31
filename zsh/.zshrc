@@ -49,5 +49,9 @@ export HISTSIZE=1000000
 export SAVEHIST=1000000
 
 # Set environment variables to include .local folders
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib:/usr/local/lib
+if [ -z $LD_LIBRARY_PATH]; then
+    export LD_LIBRARY_PATH=$HOME/.local/lib:/usr/local/lib
+else
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib:/usr/local/lib
+fi
 export CPATH=$HOME/.local/include:$CPATH
