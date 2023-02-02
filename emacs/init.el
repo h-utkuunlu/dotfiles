@@ -109,6 +109,74 @@
                              ("~/Documents/syncthing-cloud/org/gtd/tickler.org" :maxlevel . 2)))
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
 
+;; org-ref to make it easier to track references in emacs org-mode
+(use-package org-ref
+  :bind
+  (:map org-mode-map
+	("C-c ]" . org-ref-insert-link))
+  (:map global-map
+	("C-c ;" . doi-utils-add-entry-from-crossref-query)))
+
+;; pdf-tools for better pdf management / viewing
+;; hook: see https://github.com/vedang/pdf-tools#display-line-numbers-mode
+(use-package pdf-tools
+  :hook
+  ((pdf-view-mode . (lambda ()
+		      (display-line-numbers-mode -1)
+		      (setq pdf-view-display-size 'fit-page))))
+  :config
+  (pdf-tools-install))
+
+;; org-noter: Taking notes on pdf files
+;; additional setup obtained from https://github.com/fuxialexander/org-pdftools
+(use-package org-noter
+  :config
+  (setq org-noter-notes-search-path '("~/Documents/syncthing-cloud/org/references/notes/")
+	org-noter-always-create-frame nil
+	org-noter-kill-frame-at-session-end nil))
+
+(use-package org-pdftools
+  :hook (org-mode . org-pdftools-setup-link))
+
+(use-package org-noter-pdftools
+  :after org-noter
+  :config
+  ;; Add a function to ensure precise note is inserted
+  (defun org-noter-pdftools-insert-precise-note (&optional toggle-no-questions)
+    (interactive "P")
+    (org-noter--with-valid-session
+     (let ((org-noter-insert-note-no-questions (if toggle-no-questions
+                                                   (not org-noter-insert-note-no-questions)
+                                                 org-noter-insert-note-no-questions))
+           (org-pdftools-use-isearch-link t)
+           (org-pdftools-use-freepointer-annot t))
+       (org-noter-insert-note (org-noter--get-precise-info)))))
+
+  ;; fix https://github.com/weirdNox/org-noter/pull/93/commits/f8349ae7575e599f375de1be6be2d0d5de4e6cbf
+  (defun org-noter-set-start-location (&optional arg)
+    "When opening a session with this document, go to the current location.
+With a prefix ARG, remove start location."
+    (interactive "P")
+    (org-noter--with-valid-session
+     (let ((inhibit-read-only t)
+           (ast (org-noter--parse-root))
+           (location (org-noter--doc-approx-location (when (called-interactively-p 'any) 'interactive))))
+       (with-current-buffer (org-noter--session-notes-buffer session)
+         (org-with-wide-buffer
+          (goto-char (org-element-property :begin ast))
+          (if arg
+              (org-entry-delete nil org-noter-property-note-location)
+            (org-entry-put nil org-noter-property-note-location
+                           (org-noter--pretty-print-location location))))))))
+  (with-eval-after-load 'pdf-annot
+    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+
+;; Tools to process web content as org documents
+;; https://github.com/alphapapa/org-web-tools
+;; Depends on pandoc to be installed in your system
+;; Command of use: org-web-tools-read-url-as-org
+(use-package org-web-tools)
+
 ;; Bibtex
 (use-package bibtex
   :config
@@ -173,68 +241,6 @@
 
 ;; async is a dependency for org-ref to be able to download files asynchronously
 (use-package async)
-
-;; org-ref to make it easier to track references in emacs org-mode
-(use-package org-ref
-  :bind
-  (:map org-mode-map
-	("C-c ]" . org-ref-insert-link))
-  (:map global-map
-	("C-c ;" . doi-utils-add-entry-from-crossref-query)))
-
-;; pdf-tools for better pdf management / viewing
-;; hook: see https://github.com/vedang/pdf-tools#display-line-numbers-mode
-(use-package pdf-tools
-  :hook
-  ((pdf-view-mode . (lambda ()
-		      (display-line-numbers-mode -1)
-		      (setq pdf-view-display-size 'fit-page))))
-  :config
-  (pdf-tools-install))
-
-;; org-noter: Taking notes on pdf files
-;; additional setup obtained from https://github.com/fuxialexander/org-pdftools
-(use-package org-noter
-  :config
-  (setq org-noter-notes-search-path '("~/Documents/syncthing-cloud/org/references/notes/")
-	org-noter-always-create-frame nil
-	org-noter-kill-frame-at-session-end nil))
-
-(use-package org-pdftools
-  :hook (org-mode . org-pdftools-setup-link))
-
-(use-package org-noter-pdftools
-  :after org-noter
-  :config
-  ;; Add a function to ensure precise note is inserted
-  (defun org-noter-pdftools-insert-precise-note (&optional toggle-no-questions)
-    (interactive "P")
-    (org-noter--with-valid-session
-     (let ((org-noter-insert-note-no-questions (if toggle-no-questions
-                                                   (not org-noter-insert-note-no-questions)
-                                                 org-noter-insert-note-no-questions))
-           (org-pdftools-use-isearch-link t)
-           (org-pdftools-use-freepointer-annot t))
-       (org-noter-insert-note (org-noter--get-precise-info)))))
-
-  ;; fix https://github.com/weirdNox/org-noter/pull/93/commits/f8349ae7575e599f375de1be6be2d0d5de4e6cbf
-  (defun org-noter-set-start-location (&optional arg)
-    "When opening a session with this document, go to the current location.
-With a prefix ARG, remove start location."
-    (interactive "P")
-    (org-noter--with-valid-session
-     (let ((inhibit-read-only t)
-           (ast (org-noter--parse-root))
-           (location (org-noter--doc-approx-location (when (called-interactively-p 'any) 'interactive))))
-       (with-current-buffer (org-noter--session-notes-buffer session)
-         (org-with-wide-buffer
-          (goto-char (org-element-property :begin ast))
-          (if arg
-              (org-entry-delete nil org-noter-property-note-location)
-            (org-entry-put nil org-noter-property-note-location
-                           (org-noter--pretty-print-location location))))))))
-  (with-eval-after-load 'pdf-annot
-    (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 
 ;; Magit - Git interface
 (use-package magit
