@@ -24,10 +24,32 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from libqtile import bar, layout, widget
+import os
+import subprocess
+from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+
+
+@hook.subscribe.startup
+def dbus_register():
+    id = os.environ.get("DESKTOP_AUTOSTART_ID")
+    if not id:
+        return
+    subprocess.Popen(
+        [
+            "dbus-send",
+            "--session",
+            "--print-reply",
+            "--dest=org.gnome.SessionManager",
+            "/org/gnome/SessionManager",
+            "org.gnome.SessionManager.RegisterClient",
+            "string:qtile",
+            "string:" + id,
+        ]
+    )
+
 
 # Tomorrow night bright theme
 colors = {
@@ -55,6 +77,7 @@ colors = {
 
 mod = "mod4"
 terminal = guess_terminal()
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -102,7 +125,16 @@ keys = [
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    # Session management
+    # Have multiple shutdown commands to deal with gnome-session
+    Key(
+        [mod, "control"],
+        "q",
+        lazy.spawn("gnome-session-quit --logout --no-prompt"),
+        lazy.shutdown(),
+        desc="Shutdown Qtile",
+    ),
+    Key(["mod1", "control"], "l", lazy.spawn("gnome-screensaver-command -l")),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     # Fullscreen toggle
     Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen"),
