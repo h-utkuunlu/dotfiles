@@ -81,6 +81,11 @@ install_if_missing tmux
 backup_file $HOME/.tmux.conf
 ln -sb $PWD/.tmux.conf $HOME/.tmux.conf
 
+##### alacritty #####
+print_emph "** Configuring Alacritty **"
+install_if_missing alacritty
+ln -sb $PWD/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+
 ##### emacs #####
 print_emph "** Configuring emacs **"
 install_if_missing emacs
@@ -95,9 +100,16 @@ emacs --daemon
 emacsclient -e "(kill-emacs)"
 
 ##### qtile #####
+print_emph "** Configuring qtile **"
 backup_file $HOME/.config/qtile/config.py
 ln -sb $PWD/qtile_config.py $HOME/.config/qtile/config.py 
 
+##### openbox #####
+print_emph "** Configuring openbox **"
+install_if_missing openbox
+
+backup_file $HOME/.config/openbox
+ln -sb $PWD/openbox $HOME/.config/openbox
 ##### clangd-format #####
 print_emph "** Configuring clang-format **"
 ln -sb $PWD/.clang-format $HOME/.clang-format
