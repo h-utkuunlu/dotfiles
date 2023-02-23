@@ -41,7 +41,6 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # Update $PATH
-source /opt/ros/noetic/setup.zsh
 export PATH=$HOME/.local/bin:$PATH
 
 # Increase histsize
