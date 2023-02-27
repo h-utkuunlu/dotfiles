@@ -48,9 +48,24 @@ export HISTSIZE=1000000
 export SAVEHIST=1000000
 
 # Set environment variables to include .local folders
-if [ -z $LD_LIBRARY_PATH ]; then
-    export LD_LIBRARY_PATH=$HOME/.local/lib:/usr/local/lib
-else
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib:/usr/local/lib
-fi
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$HOME/.local/lib:/usr/local/lib
 export CPATH=$HOME/.local/include:$CPATH
+
+# Functions to enable particular development environments
+enable_cuda (){
+    export PATH=/usr/local/cuda-12.0/bin${PATH:+:${PATH}}
+    export LD_LIBRARY_PATH=/usr/local/cuda-12.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+    echo "-> Updated PATH and LD_LIBRARY_PATH to include cuda files"
+}
+
+enable_ros1 (){
+    source /opt/ros/noetic/setup.zsh && echo "-> ROS Noetic is active"
+}
+
+enable_ros2 (){
+    source /opt/ros/foxy/setup.zsh && echo "-> ROS2 Foxy is active"
+}
+
+enable_conda() {
+    source $HOME/.local/opt/miniconda3/etc/profile.d/conda.sh && echo "-> Conda package management active"
+}
