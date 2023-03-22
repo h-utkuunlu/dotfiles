@@ -55,12 +55,31 @@ enable_cuda (){
     echo "-> Updated PATH and LD_LIBRARY_PATH to include cuda files"
 }
 
+# Could make this to iterate over a list as well, but ROS1 is EOL soon
 enable_ros1 (){
-    source /opt/ros/noetic/setup.zsh && echo "-> ROS Noetic is active"
+    if [ -d /opt/ros/noetic ]; then
+	source /opt/ros/noetic/setup.zsh && echo "-> ROS Noetic is active"
+    else
+	echo "-> ROS Noetic is not installed"
+	return 1
+    fi
 }
 
 enable_ros2 (){
-    source /opt/ros/foxy/setup.zsh && echo "-> ROS2 Foxy is active"
+    local _ros_not_found=1
+    for distro in humble foxy
+    do
+	if [ -d /opt/ros/$distro ]; then
+	    source /opt/ros/$distro/setup.zsh && echo "-> ROS2 '$distro' is active"
+	    _ros_not_found=0
+	    break
+	fi
+    done
+    
+    if (( _ros_not_found == 1 )); then
+	echo "-> ROS2 not found"
+    fi
+    return _ros_found
 }
 
 enable_conda() {
