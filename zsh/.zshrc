@@ -40,16 +40,13 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# Update $PATH
-export PATH=$HOME/.local/bin:$PATH
-
 # Increase histsize
 export HISTSIZE=1000000
 export SAVEHIST=1000000
 
-# Set environment variables to include .local folders
+# Set some environment variables to include .local folders
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$HOME/.local/lib:/usr/local/lib
-export CPATH=$HOME/.local/include:$CPATH
+export CPATH=${CPATH:+$CPATH:}$HOME/.local/include
 
 # Functions to enable particular development environments
 enable_cuda (){
