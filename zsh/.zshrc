@@ -66,20 +66,17 @@ enable_ros1 (){
 }
 
 enable_ros2 (){
-    local _ros_not_found=1
     for distro in humble foxy
     do
 	if [ -d /opt/ros/$distro ]; then
 	    source /opt/ros/$distro/setup.zsh && echo "-> ROS2 '$distro' is active"
-	    _ros_not_found=0
-	    break
+	    return 0
 	fi
     done
     
-    if (( _ros_not_found == 1 )); then
-	echo "-> ROS2 not found"
-    fi
-    return _ros_found
+    # No valid candidate found
+    echo "-> ROS2 not found"
+    return 1
 }
 
 enable_conda() {
