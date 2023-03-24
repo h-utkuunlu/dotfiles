@@ -70,6 +70,7 @@ enable_ros2 (){
     do
 	if [ -d /opt/ros/$distro ]; then
 	    source /opt/ros/$distro/setup.zsh && echo "-> ROS2 '$distro' is active"
+	    complete -o nospace -o default -F _python_argcomplete "ros2"
 	    return 0
 	fi
     done
