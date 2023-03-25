@@ -43,6 +43,33 @@
       </startupnotify>
     </action>
   </item>
+  <item label="Lutris">
+    <action name="Execute">
+      <command>lutris</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+</menu>
+
+<menu id="apps-finances-menu" label="Finances">
+  <item label="GNU Cash">
+    <action name="Execute">
+      <command>gnucash</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
+  <item label="IB TWS">
+    <action name="Execute">
+      <command>ib-tws</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
 </menu>
 
 <menu id="apps-graphics-menu" label="Graphics">
@@ -83,6 +110,7 @@
   <menu id="apps-editors-menu"/>
   <menu id="apps-net-menu"/>
   <menu id="apps-multimedia-menu"/>
+  <menu id="apps-finances-menu"/>
   <separator label="System" />
   <menu id="system-menu"/>
   <separator />
