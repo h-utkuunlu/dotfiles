@@ -35,6 +35,14 @@
 </menu>
 
 <menu id="apps-multimedia-menu" label="Multimedia">
+  <item label="Spotify">
+    <action name="Execute">
+      <command>spotify</command>
+      <startupnotify>
+        <enabled>yes</enabled>
+      </startupnotify>
+    </action>
+  </item>
   <item label="Steam">
     <action name="Execute">
       <command>steam</command>
