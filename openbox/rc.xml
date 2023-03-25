@@ -297,6 +297,38 @@ Copy the file to $HOME/.config/openbox/ instead. -->
       </action>
     </keybind>
 
+    <!-- Keybindings for window placement with arrow keys  -->
+    <keybind key="W-Left">
+      <action name="UnmaximizeFull"/>
+      <action name="MoveResizeTo">
+	<x>0</x>
+	<y>0</y>
+	<height>100%</height>
+	<width>50%</width>
+      </action>
+    </keybind>
+    <keybind key="W-Right">
+      <action name="UnmaximizeFull"/>
+      <action name="MoveResizeTo">
+	<x>50%</x>
+	<y>0</y>
+	<height>100%</height>
+	<width>50%</width>
+      </action>
+    </keybind>
+    <keybind key="W-Up">
+      <action name="Maximize"/>
+    </keybind>
+    <keybind key="W-Down">
+      <action name="Unmaximize"/>
+      <action name="MoveResizeTo">
+	<x>5%</x>
+	<y>5%</y>
+	<height>20%</height>
+	<width>30%</width>
+      </action>
+    </keybind>
+      
     <!-- Keybindings for multimedia buttons -->
     <keybind key="XF86AudioRaiseVolume">
       <action name="Execute">
