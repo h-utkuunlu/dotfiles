@@ -251,8 +251,16 @@ With a prefix ARG, remove start location."
   :init
   (global-company-mode 1)
   :config
-  (setq company-idle-delay 0.0)
-  (setq company-minimum-prefix-length 1))
+  ;; Backend-relevant
+  ;; :separate retains the order of results from the list of backends provided here.
+  ;; So, yasnippet results are prioritized
+  (setq company-backends '((:separate company-yasnippet company-capf company-dabbrev-code company-files company-dabbrev))
+	company-dabbrev-other-buffers nil ;; Do not use other buffers for dabbrev
+	company-dabbrev-downcase nil) ;; Do not replace text with lowercase versions
+
+  (setq company-idle-delay 0.0
+	company-minimum-prefix-length 1
+	company-tooltip-limit 20))
 
 ;; Prescient - different, predictive sorting / finding algorithm
 (use-package prescient
@@ -269,10 +277,11 @@ With a prefix ARG, remove start location."
 
 ;; Yasnippet provides easy insertion of boilerplate snippets
 (use-package yasnippet
-  :init
-  (yas-global-mode 1)
   :config
-  (setq yas-snippet-dirs '("~/dotfiles/emacs/yasnippets")))
+  (setq yas-snippet-dirs '("~/dotfiles/emacs/yasnippets"))
+  (yas-reload-all)
+  :hook
+  (prog-mode . yas-minor-mode))
 
 ;; Support for YAML syntax
 (use-package yaml-mode
