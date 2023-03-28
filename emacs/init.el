@@ -275,6 +275,10 @@ With a prefix ARG, remove start location."
   :config
   (company-prescient-mode))
 
+(use-package company-jedi
+  :commands (company-jedi)
+  :after (company python-mode))
+
 ;; Yasnippet provides easy insertion of boilerplate snippets
 (use-package yasnippet
   :config
