@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: for ... in ... : ...
+# name: for-loop
 # key: for
 # group : control structure
 # --

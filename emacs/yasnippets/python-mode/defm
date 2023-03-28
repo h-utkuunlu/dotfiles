@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: def_main
+# key: defm
+# expand-env: ((yas-indent-line 'fixed))
+# --
+if __name__ == "__main__":
+    main()
+
+
+def main():
+    
