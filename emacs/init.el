@@ -39,11 +39,11 @@
 ;; Don't clutter up directories with files~ and #files#
 ;; Backups saved to emacs.d/backup, autosaves to emacs.d/autosave
 (defvar autosave-dir (expand-file-name "~/.emacs.d/autosave/"))
-(setq auto-save-list-file-prefix autosave-dir)
-(setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
+(setq auto-save-list-file-prefix autosave-dir
+      auto-save-file-name-transforms `((".*" ,autosave-dir t)))
 
-(setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
-(setq backup-by-copying t
+(setq backup-directory-alist `(("." . "~/.emacs.d/backup"))
+      backup-by-copying t
       delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
@@ -51,8 +51,7 @@
       auto-save-default t
       auto-save-timeout 20
       auto-save-interval 200
-      version-control t
-      )
+      version-control t)
 
 ;; Install & configure straight-use-package
 ;; (https://github.com/radian-software/straight.el)
@@ -88,26 +87,26 @@
 	("C-c c" . org-capture))
   :hook (org-mode . auto-fill-mode)  ;; Adjust the text length
   :config
-  (setq org-log-done t)
-  (setq org-agenda-files (list "~/Documents/syncthing-cloud/org/agenda/work.org"
-			       "~/Documents/syncthing-cloud/org/agenda/home.org"
-			       "~/Documents/syncthing-cloud/org/gtd/inbox.org"
-			       "~/Documents/syncthing-cloud/org/gtd/gtd.org"
-			       "~/Documents/syncthing-cloud/org/gtd/tickler.org"))
-  (setq org-capture-templates '(("t" "Todo [inbox]" entry
-				 (file+headline "~/Documents/syncthing-cloud/org/gtd/inbox.org" "Tasks")
+  (setq org-log-done t
+	org-agenda-files (list "~/org/agenda/work.org"
+			       "~/org/agenda/home.org"
+			       "~/org/gtd/inbox.org"
+			       "~/org/gtd/gtd.org"
+			       "~/org/gtd/tickler.org")
+	org-capture-templates '(("t" "Todo [inbox]" entry
+				 (file+headline "~/org/gtd/inbox.org" "Tasks")
 				 "* TODO %i%?")
 				("T" "Tickler" entry
-				 (file+headline "~/Documents/syncthing-cloud/org/gtd/tickler.org" "Tickler")
+				 (file+headline "~/org/gtd/tickler.org" "Tickler")
 				 "* %i%? \n %U")
 				("n" "Note" item
-				 (file+headline "~/Documents/syncthing-cloud/org/notes/notes.org" "Notes (Uncategorized)")
+				 (file+headline "~/org/notes/notes.org" "Notes (Uncategorized)")
 				 "- %?" :empty-lines-before 1))
-	)
-  (setq org-refile-targets '(("~/Documents/syncthing-cloud/org/gtd/gtd.org" :maxlevel . 3)
-                             ("~/Documents/syncthing-cloud/org/gtd/someday.org" :level . 1)
-                             ("~/Documents/syncthing-cloud/org/gtd/tickler.org" :maxlevel . 2)))
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
+
+	org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
+                             ("~/org/gtd/someday.org" :level . 1)
+                             ("~/org/gtd/tickler.org" :maxlevel . 2))
+	org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
 
 ;; org-ref to make it easier to track references in emacs org-mode
 (use-package org-ref
@@ -131,7 +130,7 @@
 ;; additional setup obtained from https://github.com/fuxialexander/org-pdftools
 (use-package org-noter
   :config
-  (setq org-noter-notes-search-path '("~/Documents/syncthing-cloud/org/references/notes/")
+  (setq org-noter-notes-search-path '("~/org/references/notes/")
 	org-noter-always-create-frame nil
 	org-noter-kill-frame-at-session-end nil))
 
@@ -201,10 +200,10 @@ With a prefix ARG, remove start location."
 	("C-r" . counsel-minibuffer-history))
   :config
   (ivy-mode)
-  (setq ivy-use-virtual-buffers t)
-  ;; enable this if you want `swiper' to use it
-  ;; (setq search-default-mode #'char-fold-to-regexp)  ;; Doesn't work with swiper & prescient together
-  (setq enable-recursive-minibuffers t))
+  (setq ivy-use-virtual-buffers t
+	enable-recursive-minibuffers t))
+;; enable this if you want `swiper' to use it
+;; (setq search-default-mode #'char-fold-to-regexp)  ;; Doesn't work with swiper & prescient together
 
 (use-package counsel
   :bind
@@ -228,9 +227,9 @@ With a prefix ARG, remove start location."
   (:map global-map
 	("C-c i" . ivy-bibtex))
   :config ;; Obtained from org-ref page
-  (setq bibtex-completion-bibliography '("~/Documents/syncthing-cloud/org/references/articles.bib")
-	bibtex-completion-library-path '("~/Documents/syncthing-cloud/org/references/pdfs/")
-	bibtex-completion-notes-path "~/Documents/syncthing-cloud/org/references/notes/"
+  (setq bibtex-completion-bibliography '("~/org/references/articles.bib")
+	bibtex-completion-library-path '("~/org/references/pdfs/")
+	bibtex-completion-notes-path "~/org/references/notes/"
 	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
 	bibtex-completion-display-formats
 	'((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
@@ -304,11 +303,12 @@ With a prefix ARG, remove start location."
   :config
   ;; query-driver option fetches the compilation symbols from the used compiler
   ;; (No need to retain 2 copies of standard libraries if using gcc)
-  (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++"))
-  (setq lsp-clangd-binary-path "/usr/bin/clangd")
-  (setq lsp-idle-delay 0.1)
-  (setq read-process-output-max (* 1024 1024)) ;; Emacs default (4K) too low for LSP
-  (setq gc-cons-threshold (* 100 1024 1024))) ;; Emacs default low for LSP
+  (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
+	lsp-clangd-binary-path "/usr/bin/clangd"
+	lsp-idle-delay 0.1
+	lsp-completion-provider :none  ;; https://reddit.com/r/emacs/comments/imlw1u/comment/g4184tz
+	read-process-output-max (* 1024 1024) ;; Emacs default (4K) too low for LSP
+	gc-cons-threshold (* 100 1024 1024))) ;; Emacs default low for LSP
 
 ;; Python LSP interface
 (use-package lsp-jedi)
