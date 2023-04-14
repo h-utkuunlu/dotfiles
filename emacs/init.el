@@ -437,6 +437,11 @@ With a prefix ARG, remove start location."
   :config
   (exec-path-from-shell-initialize))
 
+;; Cleans whitespaces on modified lines
+(use-package ws-butler
+  :config
+  (ws-butler-global-mode))
+
 ;; Ask for confirmation when using C-c C-x to kill a session
 (defun ask-before-closing ()
   "Close only if y was pressed."
