@@ -26,6 +26,9 @@
 ;; Show empty lines
 (set-default 'indicate-empty-lines t)
 
+;; Adjust font size (10pt)
+(set-face-attribute 'default nil :height 100)
+
 ;; Use clipboard
 (setq select-enable-clipboard t)
 
