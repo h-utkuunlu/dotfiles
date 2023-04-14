@@ -335,7 +335,6 @@ With a prefix ARG, remove start location."
   (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
 	lsp-clangd-binary-path "/usr/bin/clangd"
 	lsp-idle-delay 0.1
-	lsp-completion-provider :none  ;; https://reddit.com/r/emacs/comments/imlw1u/comment/g4184tz
 	read-process-output-max (* 1024 1024) ;; Emacs default (4K) too low for LSP
 	gc-cons-threshold (* 100 1024 1024))) ;; Emacs default low for LSP
 
