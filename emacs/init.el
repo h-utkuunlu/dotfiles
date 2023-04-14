@@ -251,8 +251,14 @@ With a prefix ARG, remove start location."
 
 ;; Magit - Git interface
 (use-package magit
+  :bind
+  (:map global-map
+	("C-c m" . magit-status))
   :config
-  (global-set-key (kbd "C-c m") 'magit-status))
+  (setq git-commit-summary-max-length 50)
+  :hook
+  (git-commit-mode . (lambda ()
+		       (setq fill-column 72))))
 
 ;; Comp(lete)any package for completions
 (use-package company
