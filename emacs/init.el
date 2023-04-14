@@ -287,9 +287,9 @@ With a prefix ARG, remove start location."
   :config
   (ivy-prescient-mode))
 
-(use-package company-prescient
-  :config
-  (company-prescient-mode))
+;; (use-package company-prescient
+;;   :config
+;;   (company-prescient-mode))
 
 (use-package company-jedi
   :commands (company-jedi)
