@@ -72,9 +72,11 @@
 ;; Install use-package
 (straight-use-package 'use-package)
 
-;; Make use-package use straight by default
+;; Make use-package use straight by default & optimize vc filesizes
 (use-package straight
-  :custom (straight-use-package-by-default t))
+  :config
+  (setq straight-use-package-by-default t
+	straight-vc-git-default-clone-depth '(1 single-branch)))
 
 ;; Org mode
 ;; Check https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html for GTD
