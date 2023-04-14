@@ -217,13 +217,13 @@ With a prefix ARG, remove start location."
 
 (use-package swiper)
 
-;; Ranger - dired but more
-(use-package ranger
-  :bind
-  (:map global-map
-	("C-x d" . ranger))
-  :config
-  (ranger-override-dired-mode t))
+;; ;; Ranger - dired but more (or maybe not as much)
+;; (use-package ranger
+;;   :bind
+;;   (:map global-map
+;; 	("C-x d" . ranger))
+;;   :config
+;;   (ranger-override-dired-mode t))
 
 ;; Display output in a posframe
 (use-package ivy-posframe
