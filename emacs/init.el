@@ -107,7 +107,6 @@
 				("n" "Note" item
 				 (file+headline "~/org/notes/notes.org" "Notes (Uncategorized)")
 				 "- %?" :empty-lines-before 1))
-
 	org-refile-targets '(("~/org/gtd/gtd.org" :maxlevel . 3)
                              ("~/org/gtd/someday.org" :level . 1)
                              ("~/org/gtd/tickler.org" :maxlevel . 2))
@@ -321,7 +320,13 @@ With a prefix ARG, remove start location."
 ;; Which-key shows available commands after a key press
 (use-package which-key
   :config
+  ;; To trigger manually, enable below settings
+  ;; (setq which-key-show-early-on-C-h t
+  ;; 	which-key-idle-delay 10000
+  ;; 	which-key-idle-secondary-delay 0.05)
+  (setq which-key-side-window-location 'right)
   (which-key-mode))
+
 
 ;; Language Server Protocol - comprehending the code & showing potential errors
 (use-package lsp-mode
@@ -330,7 +335,7 @@ With a prefix ARG, remove start location."
   :hook ((python-mode . lsp-mode)
 	 (c-mode-common . lsp-mode)
 	 (lsp-mode . (lambda ()
-                       (let ((lsp-keymap-prefix "C-c l"))
+		       (let ((lsp-keymap-prefix "C-c l"))
                          (lsp-enable-which-key-integration)))))
   :config
   ;; query-driver option fetches the compilation symbols from the used compiler
