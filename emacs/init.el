@@ -305,9 +305,9 @@ With a prefix ARG, remove start location."
 
 ;; Support for YAML syntax
 (use-package yaml-mode
-  :hook
-  ((yaml-mode . (lambda ()
-		  (define-key yaml-mode-map "\C-m" 'newline-and-indent)))))
+  :bind
+  (:map yaml-mode-map
+	("C-m" . newline-and-indent)))
 
 ;; Support for Dockerfile syntax
 (use-package dockerfile-mode)
