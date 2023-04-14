@@ -81,6 +81,11 @@
   (setq straight-use-package-by-default t
 	straight-vc-git-default-clone-depth '(1 single-branch)))
 
+;; Guru mode - practice avoiding arrow keys
+(use-package guru-mode
+  :config
+  (guru-global-mode))
+
 ;; Org mode
 ;; Check https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html for GTD
 (use-package org
