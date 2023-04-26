@@ -231,9 +231,8 @@
   ;; (No need to retain 2 copies of standard libraries if using gcc)
   (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
         lsp-clangd-binary-path "/usr/bin/clangd"
-        lsp-idle-delay 0.1
-        read-process-output-max (* 1024 1024) ;; Emacs default (4K) too low for LSP
-        gc-cons-threshold (* 100 1024 1024))) ;; Emacs default low for LSP
+        +format-with-lsp nil
+        lsp-idle-delay 0.1))
 
 ;; Show file structure
 (use-package! treemacs
