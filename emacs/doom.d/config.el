@@ -116,15 +116,39 @@
       "%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)
-     ("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+     ("p" "project" plain "
+* Goals
+
+%?
+
+* Tasks
+
+** TODO Add initial tasks
+
+* Dates\n\n"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Project")
       :unnarrowed t)
      ("n" "paper-note" plain ""
       :if-new (file+head "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-               "#+TITLE: ${citar-title}\n#+AUTHOR: ${citar-author}\n#+JOURNAL: ${citar-source}\n#+DATE: ${citar-date}\n#+DOI: ${doi=n/a}\n:PROPERTIES:\n:NOTER_DOCUMENT: %(car citar-library-paths)${citar-citekey}\n:END:\n\n * TODO Notes")
+               "
+#+TITLE: ${citar-title}
+#+AUTHOR: ${citar-author}
+* [[file:%(car citar-bibliography)::${citar-citekey}][${citar-citekey}]]
+:PROPERTIES:
+:NOTER_DOCUMENT: %(car citar-library-paths)${citar-citekey}.pdf
+:END:")
       :unnarrowed t)
      ("b" "book notes" plain
-      "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+      "
+* Source
+
+Author: %^{Author}
+Title: ${title}
+Year: %^{Year}
+
+* Summary
+
+%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)))
   :bind (("C-c r l" . org-roam-buffer-toggle)
@@ -187,14 +211,6 @@
   :custom
   (citar-org-roam-note-title-template "${author}-${title}")
   (citar-org-roam-capture-template-key "n")
-  (citar-org-roam-template-fields
-   '((:citar-title "title")
-     (:citar-author "author" "editor")
-     (:citar-date "date" "year" "issued")
-     (:citar-pages "pages")
-     (:citar-source "journal" "booktitle")
-     (:citar-doi "doi" "eprint")
-     (:citar-type "=type=")))
   :config
   (citar-org-roam-mode))
 
