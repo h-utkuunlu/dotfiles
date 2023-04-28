@@ -50,8 +50,8 @@ export CPATH=${CPATH:+$CPATH:}$HOME/.local/include
 
 # Functions to enable particular development environments
 enable_cuda (){
-    export PATH=/usr/local/cuda-12.0/bin${PATH:+:${PATH}}
-    export LD_LIBRARY_PATH=/usr/local/cuda-12.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+    export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}
+    export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
     echo "-> Updated PATH and LD_LIBRARY_PATH to include cuda files"
 }
 
