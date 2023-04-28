@@ -161,42 +161,6 @@ Year: %^{Year}
   :config
   (org-roam-db-autosync-mode))
 
-;; ;; org-noter: Taking notes on pdf files
-;; ;; additional setup obtained from https://github.com/fuxialexander/org-pdftools
-;; (use-package! org-noter
-;;   :after (:any org pdf-view)
-;;   :config
-;;   (setq org-noter-notes-search-path '("~/org/references/notes/")
-;;      org-noter-always-create-frame nil
-;;      org-noter-kill-frame-at-session-end nil))
-
-;; biblio: look-up papers from databases
-(after! (:any org org-roam)
-
-  (setq biblio-arxiv-bibtex-header "article"
-        biblio-bibtex-use-autokey t
-        bibtex-autokey-name-year-separator "-"
-        bibtex-autokey-year-title-separator "-"
-        bibtex-autokey-year-length 4
-        bibtex-autokey-titlewords 3
-        bibtex-autokey-titleword-length 5 ;; -1 means exactly one
-        bibtex-autokey-titlewords-stretch 0
-        bibtex-autokey-titleword-separator "-"
-        bibtex-autokey-titleword-case-convert 'downcase)
-
-  (defun my/biblio--selection-insert-at-end-of-bibfile-callback (bibtex entry)
-    "Add BIBTEX (from ENTRY) to end of a user-specified bibtex file."
-    (with-current-buffer (find-file-noselect (car citar-bibliography))
-      (goto-char (point-max))
-      (insert "\n" bibtex))
-    (message "Inserted bibtex entry for %S."
-             (biblio--prepare-title (biblio-alist-get 'title entry))))
-  (defun ans/biblio-selection-insert-end-of-bibfile ()
-    "Insert BibTeX of current entry at the end of user-specified bibtex file."
-    (interactive)
-    (biblio--selection-forward-bibtex #'my/biblio--selection-insert-at-end-of-bibfile-callback))
-  (map! :map biblio-selection-mode-map "a" #'ans/biblio-selection-insert-end-of-bibfile))
-
 ;; citar: citation & notes
 (use-package! citar
   :custom
@@ -213,6 +177,37 @@ Year: %^{Year}
   (citar-org-roam-capture-template-key "n")
   :config
   (citar-org-roam-mode))
+
+;; org-noter: Taking notes on pdf files
+(setq org-noter-always-create-frame nil
+      org-noter-kill-frame-at-session-end nil
+      org-noter-notes-search-path '("~/org/roam/"))
+
+;; biblio: look-up papers from databases
+(setq biblio-arxiv-bibtex-header "article"
+      biblio-bibtex-use-autokey t
+      bibtex-autokey-name-year-separator "-"
+      bibtex-autokey-year-title-separator "-"
+      bibtex-autokey-year-length 4
+      bibtex-autokey-titlewords 2
+      bibtex-autokey-titleword-length 5 ;; -1 means exactly one
+      bibtex-autokey-titlewords-stretch 0
+      bibtex-autokey-titleword-separator "-"
+      bibtex-autokey-titleword-case-convert 'downcase)
+
+;; Functions to add the entry at the end of the file
+(defun my/biblio--selection-insert-at-end-of-bibfile-callback (bibtex entry)
+  "Add BIBTEX (from ENTRY) to end of a user-specified bibtex file."
+  (with-current-buffer (find-file-noselect (car citar-bibliography))
+    (goto-char (point-max))
+    (insert "\n" bibtex))
+  (message "Inserted bibtex entry for %S."
+           (biblio--prepare-title (biblio-alist-get 'title entry))))
+(defun ans/biblio-selection-insert-end-of-bibfile ()
+  "Insert BibTeX of current entry at the end of user-specified bibtex file."
+  (interactive)
+  (biblio--selection-forward-bibtex #'my/biblio--selection-insert-at-end-of-bibfile-callback))
+(map! :map biblio-selection-mode-map "a" #'ans/biblio-selection-insert-end-of-bibfile)
 
 ;; Magit - Git interface
 (use-package! magit
