@@ -267,3 +267,10 @@ Year: %^{Year}
 
 ;; Associate .launch files with xml
 (add-to-list 'auto-mode-alist '("\\.launch\\'" . xml-mode))
+
+;; Nov.el to read epub from emacs
+(use-package! nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :config
+  (setq nov-save-place-file (concat doom-cache-dir "nov-places")
+        nov-text-width 88))

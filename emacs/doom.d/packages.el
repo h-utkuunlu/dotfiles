@@ -59,3 +59,6 @@
 
 ;; Open a terminal at point
 (package! terminal-here)
+
+;; Epub support
+(package! nov)
