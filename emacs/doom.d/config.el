@@ -264,3 +264,6 @@ Year: %^{Year}
 (use-package! terminal-here
   :commands (terminal-here-launch)
   :bind ("C-c <return>" . terminal-here-launch))
+
+;; Associate .launch files with xml
+(add-to-list 'auto-mode-alist '("\\.launch\\'" . xml-mode))
