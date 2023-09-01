@@ -209,6 +209,23 @@ Year: %^{Year}
   (biblio--selection-forward-bibtex #'my/biblio--selection-insert-at-end-of-bibfile-callback))
 (map! :map biblio-selection-mode-map "a" #'ans/biblio-selection-insert-end-of-bibfile)
 
+;; Modify downloading options
+(setq biblio-download-directory (car citar-library-paths))
+(defun my/biblio-download--action (record)
+  "Retrieve a RECORD from Dissemin, and display it.
+RECORD is a formatted record as expected by `biblio-insert-result'."
+  (let-alist record
+    (bibtex-generate-autokey)
+    ;; (if .direct-url
+    ;;     (let* ((fname (concat .identifier ".pdf"))
+    ;;            (target (read-file-name "Save as (see also biblio-download-directory): "
+    ;;                                    biblio-download-directory fname nil fname)))
+    ;;       (url-copy-file .direct-url (expand-file-name target biblio-download-directory)))
+    ;;   (user-error "This record does not contain a direct URL (try arXiv or HAL)"))
+    ))
+
+(advice-add 'biblio-download--action :override #'my/biblio-download--action)
+
 ;; Magit - Git interface
 (use-package! magit
   :bind
@@ -274,3 +291,10 @@ Year: %^{Year}
   :config
   (setq nov-save-place-file (concat doom-cache-dir "nov-places")
         nov-text-width 88))
+
+(after! nov-mode
+  (require 'org-noter-nov))
+
+;; cuda to use clang-format
+(after! cuda-mode
+  (setq-local +format-with 'clang-format))
