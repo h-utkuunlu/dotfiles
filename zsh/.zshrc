@@ -57,22 +57,24 @@ enable_cuda (){
 
 # Could make this to iterate over a list as well, but ROS1 is EOL soon
 enable_ros1 (){
-    if [ -d /opt/ros/noetic ]; then
-	source /opt/ros/noetic/setup.zsh && echo "-> ROS Noetic is active"
+    if [ -d /opt/ros/noetic ]
+    then
+        source /opt/ros/noetic/setup.zsh && echo "-> ROS Noetic is active"
+        export ROSCONSOLE_FORMAT='[${severity}] [${time} ${node}]: ${message}'
     else
-	echo "-> ROS Noetic is not installed"
-	return 1
+    echo "-> ROS Noetic is not installed"
+    return 1
     fi
 }
 
 enable_ros2 (){
     for distro in humble foxy
     do
-	if [ -d /opt/ros/$distro ]; then
-	    source /opt/ros/$distro/setup.zsh && echo "-> ROS2 '$distro' is active"
-	    complete -o nospace -o default -F _python_argcomplete "ros2"
-	    return 0
-	fi
+    if [ -d /opt/ros/$distro ]; then
+        source /opt/ros/$distro/setup.zsh && echo "-> ROS2 '$distro' is active"
+        complete -o nospace -o default -F _python_argcomplete "ros2"
+        return 0
+    fi
     done
     
     # No valid candidate found
