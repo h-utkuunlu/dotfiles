@@ -100,11 +100,20 @@
         ("<return>" . ivy-alt-done)
         ("M-<return>" . ivy-done)))
 
+;; Encryption
+(org-crypt-use-before-save-magic)
+(setq org-crypt-key "E0F2D5B50EDB3FC7")
+(setq org-crypt-disable-auto-save t)
+
 ;; Additional org config
 (add-hook! org-mode 'auto-fill-mode)
 (setq org-agenda-files (list "~/org/agenda/work.org"
                              "~/org/agenda/home.org"
                              "~/org/gtd/tickler.org"))
+
+;; Org journal
+(setq org-journal-dir (file-truename "~/org/journal")
+      org-journal-enable-encryption t)
 
 ;; Org-roam: information linking
 (use-package! org-roam
@@ -130,7 +139,7 @@
       :unnarrowed t)
      ("n" "paper-note" plain ""
       :if-new (file+head "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-               "
+                         "
 #+TITLE: ${citar-title}
 #+AUTHOR: ${citar-author}
 * [[file:%(car citar-bibliography)::${citar-citekey}][${citar-citekey}]]
@@ -151,13 +160,6 @@ Year: %^{Year}
 %?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)))
-  :bind (("C-c r l" . org-roam-buffer-toggle)
-         ("C-c r f" . org-roam-node-find)
-         ("C-c r g" . org-roam-graph)
-         ("C-c r i" . org-roam-node-insert)
-         ("C-c r c" . org-roam-capture)
-         ;; Dailies
-         ("C-c r j" . org-roam-dailies-capture-today))
   :config
   (org-roam-db-autosync-mode))
 
@@ -230,12 +232,12 @@ RECORD is a formatted record as expected by `biblio-insert-result'."
 (use-package! magit
   :bind
   (:map global-map
-     ("C-c m" . magit-status))
+        ("C-c m" . magit-status))
   :config
   (setq git-commit-summary-max-length 50)
   :hook
   (git-commit-mode . (lambda ()
-     (setq fill-column 72))))
+                       (setq fill-column 72))))
 
 ;; Comp(lete)any package for completions
 ;; :separate retains the order of results from the list of backends provided here.
@@ -268,7 +270,7 @@ RECORD is a formatted record as expected by `biblio-insert-result'."
   :bind
   (:map global-map
         ([f8] . treemacs)  ;; Open / close treemacs
-("C-<f8>" . treemacs-select-window))  ;; Switch to the side window
+        ("C-<f8>" . treemacs-select-window))  ;; Switch to the side window
   :config
   (setq treemacs-is-never-other-window t))  ;; C-x o does not include treemacs window
 
