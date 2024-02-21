@@ -1,6 +1,7 @@
 [user]
-	name = Halil Utku Unlu
-	email = h.utkuunlu@gmail.com
+	name = H. Utku Unlu
+	email = utku@utkuunlu.com
+	signingkey = 545BEA36A8B17F32!
 [core]
 	editor = emacs -nw
 [color]
@@ -19,3 +20,5 @@
 	recurse = true
 [protocol "file"]
 	allow = always
+[commit]
+	gpgsign = true
