@@ -48,6 +48,9 @@ export SAVEHIST=1000000
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$HOME/.local/lib:/usr/local/lib
 export CPATH=${CPATH:+$CPATH:}$HOME/.local/include
 
+# Default editor
+export EDITOR=nano
+
 # Functions to enable particular development environments
 enable_cuda (){
     export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}

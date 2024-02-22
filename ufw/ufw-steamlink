@@ -1,0 +1,4 @@
+[SteamLink]
+title=SteamLink
+description=Allow remote play from Steam
+ports=27031,27036/udp|27036,27037/tcp

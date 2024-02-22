@@ -1,0 +1,4 @@
+[NordVPN]
+title=NordVPN
+description=NordVPN ports to be opened
+ports=443/tcp|1194/udp

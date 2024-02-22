@@ -1,0 +1,4 @@
+* UFW Additional App Profiles
+
+Copy these to ~/etc/ufw/applications.d~ to allow the apps within UFW, without having to
+specify each port/rule separately

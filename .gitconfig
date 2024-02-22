@@ -3,7 +3,7 @@
 	email = utku@utkuunlu.com
 	signingkey = 545BEA36A8B17F32!
 [core]
-	editor = emacs -nw
+	editor = nano
 [color]
 	ui = true
 [color "grep"]
