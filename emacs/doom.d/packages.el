@@ -50,7 +50,6 @@
 ;; (unpin! t)
 
 ;; Turn emacs into an academic paper / knowledge database
-(package! org-roam)
 (package! org-roam-bibtex)
 (package! citar-org-roam)
 (package! org-noter)
@@ -62,3 +61,6 @@
 
 ;; Epub support
 (package! nov)
+
+;; Aphelia error: https://github.com/doomemacs/doomemacs/issues/7568
+(unpin! apheleia)

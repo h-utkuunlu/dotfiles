@@ -100,6 +100,16 @@
         ("<return>" . ivy-alt-done)
         ("M-<return>" . ivy-done)))
 
+;; TRAMP optimization
+(setq tramp-auto-save-directory "/tmp")
+(setq remote-file-name-inhibit-cache nil)
+(setq remote-file-name-inhibit-locks t)
+(setq tramp-verbose 1)
+
+;; Apheleia formatting
+;; "local" option runs the local formatter, as long as the whole file is not needed
+(setq apheleia-remote-algorithm "local")
+
 ;; Encryption
 (org-crypt-use-before-save-magic)
 (setq org-crypt-key "E0F2D5B50EDB3FC7")
