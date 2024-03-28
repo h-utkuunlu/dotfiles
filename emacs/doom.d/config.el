@@ -122,9 +122,24 @@
                              "~/org/gtd/tickler.org"))
 
 ;; Org journal
-(setq org-journal-dir (file-truename "~/org/journal")
-      org-journal-enable-encryption t
-      org-journal-file-format "%Y-%m-%d")
+(defun org-journal-save-entry-and-exit()
+  "Simple convenience function.
+  Saves the buffer of the current day's entry and kills the window
+  Similar to org-capture like behavior"
+  (interactive)
+  (save-buffer)
+  (kill-buffer))
+
+(use-package! org-journal
+  :custom
+  (org-journal-dir (file-truename "~/org/journal"))
+  (org-journal-enable-encryption t)
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-date-format "%A, %Y/%m/%d")
+  (org-journal-search-result-date-format "%Y/%m/%d")
+  :bind
+  (:map org-journal-mode-map
+        ("C-x C-s" . 'org-journal-save-entry-and-exit)))
 
 ;; Org-roam: information linking
 (use-package! org-roam
