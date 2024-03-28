@@ -123,7 +123,8 @@
 
 ;; Org journal
 (setq org-journal-dir (file-truename "~/org/journal")
-      org-journal-enable-encryption t)
+      org-journal-enable-encryption t
+      org-journal-file-format "%Y-%m-%d")
 
 ;; Org-roam: information linking
 (use-package! org-roam
