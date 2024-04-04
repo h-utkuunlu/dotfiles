@@ -49,12 +49,15 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
+;; Vertico for completion backend. Additional config to emulate ivy
+(package! vertico-prescient)
+
 ;; Turn emacs into an academic paper / knowledge database
 (package! org-roam-bibtex)
-(package! citar-org-roam)
-(package! org-noter)
+(package! citar)
+;; (package! citar-org-roam)
 (package! org-web-tools)
-(package! ivy-bibtex)
+;; (package! ivy-bibtex)
 
 ;; Open a terminal at point
 (package! terminal-here)

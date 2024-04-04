@@ -7,7 +7,7 @@
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "H. Utku Unlu"
-      user-mail-address "h.utkuunlu@gmail.com")
+      user-mail-address "utku@utkuunlu.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -41,7 +41,6 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
-
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -93,12 +92,29 @@
 ;; Which-key buffer on the right side
 (setq which-key-side-window-location 'right)
 
-;; Configure Ivy to enter a directory
-(use-package! ivy
-  :bind
-  (:map ivy-minibuffer-map
-        ("<return>" . ivy-alt-done)
-        ("M-<return>" . ivy-done)))
+;; Vertico (Ivy substitution)
+;; Directory navigation
+(use-package! vertico-directory
+  :after vertico
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+;; ;; Mouse use in minibuffer
+;; (use-package! vertico-mouse
+;;   :after vertico
+;;   :config
+;;   (vertico-mouse-mode))
+
+;; Prescient in vertico
+(use-package! vertico-prescient
+  :after vertico
+  :config
+  (vertico-prescient-mode))
 
 ;; TRAMP optimization
 (setq tramp-auto-save-directory "/tmp")
@@ -110,81 +126,64 @@
 ;; "local" option runs the local formatter, as long as the whole file is not needed
 (setq apheleia-remote-algorithm "local")
 
-;; Encryption
-(org-crypt-use-before-save-magic)
-(setq org-crypt-key "E0F2D5B50EDB3FC7")
-(setq org-crypt-disable-auto-save t)
-
 ;; Additional org config
 (add-hook! org-mode 'auto-fill-mode)
-(setq org-agenda-files (list "~/org/agenda/work.org"
-                             "~/org/agenda/home.org"
-                             "~/org/gtd/tickler.org"))
-
-;; Org journal
-(defun org-journal-save-entry-and-exit()
-  "Simple convenience function.
-  Saves the buffer of the current day's entry and kills the window
-  Similar to org-capture like behavior"
-  (interactive)
-  (save-buffer)
-  (kill-buffer))
-
-(use-package! org-journal
-  :custom
-  (org-journal-dir (file-truename "~/org/journal"))
-  (org-journal-enable-encryption t)
-  (org-journal-file-format "%Y-%m-%d.org")
-  (org-journal-date-format "%A, %Y/%m/%d")
-  (org-journal-search-result-date-format "%Y/%m/%d")
-  :bind
-  (:map org-journal-mode-map
-        ("C-x C-s" . 'org-journal-save-entry-and-exit)))
 
 ;; Org-roam: information linking
 (use-package! org-roam
   :custom
   (org-roam-directory (file-truename "~/org/roam"))
+  (org-roam-dailies-directory "daily/")
+  (org-roam-dailies-capture-templates
+   '(("d" "default" entry "* %<%H:%M> %?"
+      :target (file+head "%<%Y-%m-%d>-inbox.org" "")
+      :empty-lines 1)
+     ("j" "journal" entry "* %<%H:%M> %?"
+      :target (file+head "%<%Y-%m-%d>-journal.org.gpg"
+                         ":PROPERTIES:
+:DATE: %t
+:ROAM_TAGS:
+:END:\n")
+      :empty-lines 1)))
   (org-roam-complete-everywhere t)
   (org-roam-capture-templates
-   '(("d" "default" plain
-      "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+   '(
+     ("a" "article" plain "%?"
+      :target (file+head "%<%Y-%m-%d>-${slug}.org"
+                         ":PROPERTIES:
+:AUTHOR: %^{Author}
+:DATE: %^{Publish date}t
+:ROAM_REFS: %^{URL}
+:ROAM_TAGS:
+:END:
+#+TITLE: ${title}\n")
       :unnarrowed t)
-     ("p" "project" plain "
-* Goals
-
-%?
-
-* Tasks
-
-** TODO Add initial tasks
-
-* Dates\n\n"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Project")
+     ("d" "default" plain "%?"
+      :target (file+head "%<%Y-%m-%d>-${slug}.org" "#+TITLE: ${title}\n#+ROAM_TAGS:\n")
       :unnarrowed t)
-     ("n" "paper-note" plain ""
-      :if-new (file+head "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-                         "
-#+TITLE: ${citar-title}
-#+AUTHOR: ${citar-author}
-* [[file:%(car citar-bibliography)::${citar-citekey}][${citar-citekey}]]
-:PROPERTIES:
+     ("c" "category" plain "%?"
+      :target (file+head "${slug}.org" "#+TITLE: ${title}\n#+ROAM_TAGS:\n")
+      :immediate-finish t
+      :unnarrowed t)
+     ("b" "book" plain "%?"
+      :target (file+head "%<%Y-%m-%d>-${slug}.org"
+                         ":PROPERTIES:
+:AUTHOR: %^{Author}
+:DATE: %^{Publish date}t
+:ROAM_TAGS:
+:END:
+#+TITLE: ${title}\n")
+      :unnarrowed t)
+     ("n" "literature note" plain "%?"
+      :target (file+head
+               "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+               ":PROPERTIES:
+:AUTHOR: ${citar-author}
 :NOTER_DOCUMENT: %(car citar-library-paths)${citar-citekey}.pdf
-:END:")
-      :unnarrowed t)
-     ("b" "book notes" plain
-      "
-* Source
+:END:
+#+TITLE: ${citar-title}
 
-Author: %^{Author}
-Title: ${title}
-Year: %^{Year}
-
-* Summary
-
-%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+* [[file:%(car citar-bibliography)::${citar-citekey}][${citar-citekey}]]\n")
       :unnarrowed t)))
   :config
   (org-roam-db-autosync-mode))
@@ -192,67 +191,45 @@ Year: %^{Year}
 ;; citar: citation & notes
 (use-package! citar
   :custom
-  (citar-bibliography '("~/org/references/articles.bib"))
-  (org-cite-global-bibliography citar-bibliography)
-  (citar-notes-paths '("~/org/roam/"))
-  (citar-library-paths '("~/org/references/pdfs/")))
+  (org-cite-global-bibliography '("~/org/references/articles.bib"))
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
+  (citar-bibliography org-cite-global-bibliography)
+  (citar-notes-paths '("~/org/roam"))
+  (citar-library-paths '("~/Documents/academics/pdfs/" "~/Documents/academics/books/")))
 
-;; citar-org-roam: integrate citar with roam
-(use-package! citar-org-roam
-  :after (:any citar org-roam)
-  :custom
-  (citar-org-roam-note-title-template "${author}-${title}")
-  (citar-org-roam-capture-template-key "n")
-  :config
-  (citar-org-roam-mode))
+;; ;; citar-org-roam: integrate citar with roam
+;; (use-package! citar-org-roam
+;;   :after (:any citar org-roam)
+;;   :custom
+;;   (citar-org-roam-note-title-template "${author}-${title}")
+;;   (citar-org-roam-capture-template-key "n")
+;;   :config
+;;   (citar-org-roam-mode))
 
 ;; org-noter: Taking notes on pdf files
-(setq org-noter-always-create-frame nil
-      org-noter-kill-frame-at-session-end nil
-      org-noter-notes-search-path '("~/org/roam/"))
+(use-package! org-noter
+  :custom
+  (org-noter-always-create-frame nil)
+  (org-noter-kill-frame-at-session-end nil)
+  (org-noter-notes-search-path '("~/org/roam/"))
+  :config
+  (org-noter-enable-org-roam-integration))
 
 ;; biblio: look-up papers from databases
-(setq biblio-arxiv-bibtex-header "article"
-      biblio-bibtex-use-autokey t
-      bibtex-autokey-name-year-separator "-"
-      bibtex-autokey-year-title-separator "-"
-      bibtex-autokey-year-length 4
-      bibtex-autokey-titlewords 2
-      bibtex-autokey-titleword-length 5 ;; -1 means exactly one
-      bibtex-autokey-titlewords-stretch 0
-      bibtex-autokey-titleword-separator "-"
-      bibtex-autokey-titleword-case-convert 'downcase)
-
-;; Functions to add the entry at the end of the file
-(defun my/biblio--selection-insert-at-end-of-bibfile-callback (bibtex entry)
-  "Add BIBTEX (from ENTRY) to end of a user-specified bibtex file."
-  (with-current-buffer (find-file-noselect (car citar-bibliography))
-    (goto-char (point-max))
-    (insert "\n" bibtex))
-  (message "Inserted bibtex entry for %S."
-           (biblio--prepare-title (biblio-alist-get 'title entry))))
-(defun ans/biblio-selection-insert-end-of-bibfile ()
-  "Insert BibTeX of current entry at the end of user-specified bibtex file."
-  (interactive)
-  (biblio--selection-forward-bibtex #'my/biblio--selection-insert-at-end-of-bibfile-callback))
-(map! :map biblio-selection-mode-map "a" #'ans/biblio-selection-insert-end-of-bibfile)
-
-;; Modify downloading options
-(setq biblio-download-directory (car citar-library-paths))
-(defun my/biblio-download--action (record)
-  "Retrieve a RECORD from Dissemin, and display it.
-RECORD is a formatted record as expected by `biblio-insert-result'."
-  (let-alist record
-    (bibtex-generate-autokey)
-    ;; (if .direct-url
-    ;;     (let* ((fname (concat .identifier ".pdf"))
-    ;;            (target (read-file-name "Save as (see also biblio-download-directory): "
-    ;;                                    biblio-download-directory fname nil fname)))
-    ;;       (url-copy-file .direct-url (expand-file-name target biblio-download-directory)))
-    ;;   (user-error "This record does not contain a direct URL (try arXiv or HAL)"))
-    ))
-
-(advice-add 'biblio-download--action :override #'my/biblio-download--action)
+(use-package! biblio
+  :custom
+  (biblio-arxiv-bibtex-header "article")
+  (biblio-bibtex-use-autokey t)
+  ;; Autokey formatting
+  (bibtex-autokey-year-length 4)
+  (bibtex-autokey-titlewords 1)
+  (bibtex-autokey-titleword-length -1) ;; -1 means exactly one
+  (bibtex-autokey-titlewords-stretch 0)
+  (bibtex-autokey-titleword-case-convert 'downcase)
+  ;; Download directory
+  (biblio-download-directory "~/Documents/academics/pdfs/"))
 
 ;; Magit - Git interface
 (use-package! magit
@@ -268,7 +245,7 @@ RECORD is a formatted record as expected by `biblio-insert-result'."
 ;; Comp(lete)any package for completions
 ;; :separate retains the order of results from the list of backends provided here.
 ;; So, yasnippet results are prioritized
-(setq company-backends '((:separate company-yasnippet company-capf company-dabbrev-code company-files company-dabbrev))
+(setq company-backends '((:separate company-capf company-dabbrev-code company-files company-dabbrev))
       company-dabbrev-other-buffers nil ;; Do not use other buffers for dabbrev
       company-dabbrev-downcase nil ;; Do not replace text with lowercase versions
       company-idle-delay 0.0
@@ -322,7 +299,3 @@ RECORD is a formatted record as expected by `biblio-insert-result'."
 
 (after! nov-mode
   (require 'org-noter-nov))
-
-;; cuda to use clang-format
-(after! cuda-mode
-  (setq-local +format-with 'clang-format))
