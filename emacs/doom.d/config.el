@@ -92,6 +92,11 @@
 ;; Yasnippets (file-templates directory)
 (setq +file-templates-dir "~/dotfiles/emacs/yasnippets")
 
+;; Org mode keybinding for going back
+(map! :after org
+      :map org-mode-map
+      "C-c M-o" #'org-mark-ring-goto)
+
 ;; Tool to help with executing commands inside Emacs
 (use-package! which-key
   :config
@@ -120,11 +125,11 @@
 ;;   :config
 ;;   (vertico-mouse-mode))
 
-;; ;; Prescient in vertico
-;; (use-package! vertico-prescient
-;;   :after vertico
-;;   :config
-;;   (vertico-prescient-mode))
+;; Prescient in vertico
+(use-package! vertico-prescient
+  :after vertico
+  :config
+  (vertico-prescient-mode))
 
 ;; TRAMP optimization
 (setq tramp-auto-save-directory "/tmp")
@@ -196,6 +201,14 @@
 * [[file:%(car citar-bibliography)::${citar-citekey}][${citar-citekey}]]\n")
       :unnarrowed t)))
   :config
+  (add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+                 (display-buffer-in-side-window)
+                 (side . right)
+                 (slot . 0)
+                 (window-width . 0.33)
+                 (window-parameters . ((no-other-window . t)
+                                       (no-delete-other-windows . t)))))
   (org-roam-db-autosync-mode))
 
 ;; citar: citation & notes
