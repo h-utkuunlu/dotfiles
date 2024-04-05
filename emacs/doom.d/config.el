@@ -87,20 +87,30 @@
 ;;                                        (setq-local display-fill-column-indicator nil)))
 
 ;; Tab always indents
-(setq tab-always-indent t)
+(setq tab-always-indent 'complete)
 
-;; Which-key buffer on the right side
-(setq which-key-side-window-location 'right)
+;; Yasnippets (file-templates directory)
+(setq +file-templates-dir "~/dotfiles/emacs/yasnippets")
+
+;; Tool to help with executing commands inside Emacs
+(use-package! which-key
+  :config
+  (setq which-key-side-window-location 'right
+        which-key-idle-delay 0.3))
 
 ;; Vertico (Ivy substitution)
+(use-package! vertico
+  :bind (:map global-map
+              ("C-x b" . consult-buffer)))
+
 ;; Directory navigation
 (use-package! vertico-directory
   :after vertico
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
-              ("DEL" . vertico-directory-delete-char)
-              ("M-DEL" . vertico-directory-delete-word))
+              ("<backspace>" . vertico-directory-delete-char)
+              ("C-<backspace>" . vertico-directory-delete-word))
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
@@ -110,11 +120,11 @@
 ;;   :config
 ;;   (vertico-mouse-mode))
 
-;; Prescient in vertico
-(use-package! vertico-prescient
-  :after vertico
-  :config
-  (vertico-prescient-mode))
+;; ;; Prescient in vertico
+;; (use-package! vertico-prescient
+;;   :after vertico
+;;   :config
+;;   (vertico-prescient-mode))
 
 ;; TRAMP optimization
 (setq tramp-auto-save-directory "/tmp")
@@ -242,30 +252,76 @@
   (git-commit-mode . (lambda ()
                        (setq fill-column 72))))
 
-;; Comp(lete)any package for completions
-;; :separate retains the order of results from the list of backends provided here.
-;; So, yasnippet results are prioritized
-(setq company-backends '((:separate company-capf company-dabbrev-code company-files company-dabbrev))
-      company-dabbrev-other-buffers nil ;; Do not use other buffers for dabbrev
-      company-dabbrev-downcase nil ;; Do not replace text with lowercase versions
-      company-idle-delay 0.0
-      company-minimum-prefix-length 1
-      company-tooltip-limit 20)
+;; ;; Comp(lete)any package for completions
+;; ;; :separate retains the order of results from the list of backends provided here.
+;; ;; So, yasnippet results are prioritized
+;; (setq company-backends '((:separate company-capf company-dabbrev-code company-files company-dabbrev))
+;;       company-dabbrev-other-buffers nil ;; Do not use other buffers for dabbrev
+;;       company-dabbrev-downcase nil ;; Do not replace text with lowercase versions
+;;       company-idle-delay 0.0
+;;       company-minimum-prefix-length 1
+;;       company-tooltip-limit 20)
 
-;; Language Server Protocol - comprehending the code
-(use-package! lsp-mode
-  :hook ((python-mode . lsp-mode)
-         (c-mode-common . lsp-mode)
-         (lsp-mode . (lambda ()
-                       (let ((lsp-keymap-prefix "C-c l"))
-                         (lsp-enable-which-key-integration)))))
+;; Corfu - company but new
+(use-package! corfu
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-auto-delay 0)
+  (corfu-auto-prefix 1)
+  (corfu-echo-delay 0.2)
+  (corfu-quit-at-boundary nil)
+  (corfu-quit-no-match t)
+  :bind (:map corfu-map
+              ("RET" . nil) ;; ENTER does not complete
+              ("M-SPC" . corfu-insert-separator))
+  ;; ("TAB" . corfu-next)
+  ;; ([tab] . corfu-next)
+  ;; ("S-TAB" . corfu-previous)
+  ;; ([backtab] . corfu-previous)
+  ;; ("S-<return>" . corfu-insert))
+  :init
+  (global-corfu-mode)
+  (corfu-echo-mode)
+  (corfu-history-mode))
+
+(use-package! nerd-icons-corfu
+  :after corfu
   :config
-  ;; query-driver option fetches the compilation symbols from the used compiler
-  ;; (No need to retain 2 copies of standard libraries if using gcc)
-  (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
-        lsp-clangd-binary-path "/usr/bin/clangd"
-        +format-with-lsp nil
-        lsp-idle-delay 0.1))
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
+;; Cape - more capf for corfu
+(use-package! cape)
+
+;; Yasnippets capf
+(use-package! yasnippet-capf
+  :after cape
+  :config
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+
+;; ;; Language Server Protocol - comprehending the code
+;; (use-package! lsp-mode
+;;   :hook ((python-mode . lsp-mode)
+;;          (c-mode-common . lsp-mode)
+;;          (lsp-mode . (lambda ()
+;;                        (let ((lsp-keymap-prefix "C-c l"))
+;;                          (lsp-enable-which-key-integration)))))
+;;   :config
+;;   ;; query-driver option fetches the compilation symbols from the used compiler
+;;   ;; (No need to retain 2 copies of standard libraries if using gcc)
+;;   (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
+;;         lsp-clangd-binary-path "/usr/bin/clangd"
+;;         +format-with-lsp nil
+;;         lsp-idle-delay 0.1))
+
+;; Eglot for LSP backend
+(use-package! eglot
+  :config
+  (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"
+                                                    "--header-insertion-decorators=0"
+                                                    "-j=2"
+                                                    "--background-index"
+                                                    "--query-driver=/usr/bin/c++"))))
 
 ;; Show file structure
 (use-package! treemacs

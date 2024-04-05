@@ -51,6 +51,12 @@ export CPATH=${CPATH:+$CPATH:}$HOME/.local/include
 # Default editor
 export EDITOR=nano
 
+# Add go binaries to $PATH if they exist
+if [ -d $HOME/go ]
+then
+    export PATH=${PATH:+$PATH:}$HOME/go/bin
+fi
+
 # Functions to enable particular development environments
 enable_cuda (){
     export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}

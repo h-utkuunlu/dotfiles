@@ -52,18 +52,22 @@
 ;; Vertico for completion backend. Additional config to emulate ivy
 (package! vertico-prescient)
 
+;; Corfu - company alternative from Vertico
+(package! corfu)
+(package! nerd-icons-corfu)
+
+;; Cape - additional capf for corfu
+(package! cape)
+(package! yasnippet-capf)
+
 ;; Turn emacs into an academic paper / knowledge database
 (package! org-roam-bibtex)
 (package! citar)
 ;; (package! citar-org-roam)
 (package! org-web-tools)
-;; (package! ivy-bibtex)
 
 ;; Open a terminal at point
 (package! terminal-here)
 
 ;; Epub support
 (package! nov)
-
-;; Aphelia error: https://github.com/doomemacs/doomemacs/issues/7568
-(unpin! apheleia)
