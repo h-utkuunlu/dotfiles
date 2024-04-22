@@ -169,7 +169,7 @@
 :AUTHOR: %^{Author}
 :DATE: %^{Publish date}t
 :ROAM_REFS: %^{URL}
-:ROAM_TAGS:
+:ROAM_TAGS: [[id:2220e684-7773-4a12-af45-d092f49f99e9][article]]
 :END:
 #+TITLE: ${title}\n")
       :unnarrowed t)
@@ -280,14 +280,19 @@
   :custom
   (corfu-cycle t)
   (corfu-auto t)
-  (corfu-auto-delay 0)
-  (corfu-auto-prefix 1)
+  (corfu-auto-delay 0.2)
+  (corfu-auto-prefix 2)
   (corfu-echo-delay 0.2)
   (corfu-quit-at-boundary nil)
+  (corfu-on-exact-match nil)
   (corfu-quit-no-match t)
+  (corfu-preselect 'prompt)
+  (corfu-preview-current #'insert)
   :bind (:map corfu-map
-              ("RET" . nil) ;; ENTER does not complete
-              ("M-SPC" . corfu-insert-separator))
+              ("<return>" . nil) ;; ENTER does not complete
+              ("<tab>" . nil) ;; Tab does not complete
+              ("M-SPC" . corfu-insert-separator)
+              ("S-<return>" . corfu-insert))
   ;; ("TAB" . corfu-next)
   ;; ([tab] . corfu-next)
   ;; ("S-TAB" . corfu-previous)
