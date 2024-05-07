@@ -92,10 +92,17 @@
 ;; Yasnippets (file-templates directory)
 (setq +file-templates-dir "~/dotfiles/emacs/yasnippets")
 
-;; Org mode keybinding for going back
-(map! :after org
-      :map org-mode-map
-      "C-c M-o" #'org-mark-ring-goto)
+;; Org mode additional config
+(use-package! org
+  :hook
+  ;; Instead of auto-fill with line breaks, visually fill until the fill-columnt
+  ;; Otherwise the appearance is weird for oddly-shaped windows
+  (org-mode . visual-fill-column-mode)
+  :bind (:map org-mode-map
+              ("C-c M-o" .  org-mark-ring-goto)) ;; Go back after opening a link
+  :config
+  ;; Do not indent based on level
+  (setq-default org-startup-indented nil))
 
 ;; Tool to help with executing commands inside Emacs
 (use-package! which-key
@@ -140,9 +147,6 @@
 ;; Apheleia formatting
 ;; "local" option runs the local formatter, as long as the whole file is not needed
 (setq apheleia-remote-algorithm "local")
-
-;; Additional org config
-(add-hook! org-mode 'auto-fill-mode)
 
 ;; Org-roam: information linking
 (use-package! org-roam
