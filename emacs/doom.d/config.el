@@ -78,7 +78,7 @@
 (setq fancy-splash-image (concat doom-user-dir "splash.png"))
 
 ;; Font size
-(set-face-attribute 'default nil :height 100)
+(set-face-attribute 'default nil :height 110)
 
 ;; Display 88-col fill indicator (following python black)
 (setq-default fill-column 88)
@@ -146,6 +146,8 @@
 
 ;; Apheleia formatting
 ;; "local" option runs the local formatter, as long as the whole file is not needed
+;; "remote" is blocking, but can utilize existing configurations (i.e. .clang-format)
+;; FIXME(?): Remote clang-format configuration is not respected in "remote"
 (setq apheleia-remote-algorithm "local")
 
 ;; Org-roam: information linking
@@ -178,7 +180,10 @@
 #+TITLE: ${title}\n")
       :unnarrowed t)
      ("d" "default" plain "%?"
-      :target (file+head "%<%Y-%m-%d>-${slug}.org" "#+TITLE: ${title}\n#+ROAM_TAGS:\n")
+      :target (file+head "%<%Y-%m-%d>-${slug}.org" ":PROPERTIES:
+:ROAM_TAGS:
+:END:
+#+TITLE: ${title}\n")
       :unnarrowed t)
      ("c" "category" plain "%?"
       :target (file+head "${slug}.org" "#+TITLE: ${title}\n#+ROAM_TAGS:\n")
@@ -291,9 +296,9 @@
   (corfu-on-exact-match nil)
   (corfu-quit-no-match t)
   (corfu-preselect 'prompt)
-  (corfu-preview-current #'insert)
+  (corfu-preview-current t)
   :bind (:map corfu-map
-              ("<return>" . nil) ;; ENTER does not complete
+              ("RET" . nil) ;; ENTER does not complete
               ("<tab>" . nil) ;; Tab does not complete
               ("M-SPC" . corfu-insert-separator)
               ("S-<return>" . corfu-insert))
@@ -321,29 +326,29 @@
   :config
   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
-;; ;; Language Server Protocol - comprehending the code
-;; (use-package! lsp-mode
-;;   :hook ((python-mode . lsp-mode)
-;;          (c-mode-common . lsp-mode)
-;;          (lsp-mode . (lambda ()
-;;                        (let ((lsp-keymap-prefix "C-c l"))
-;;                          (lsp-enable-which-key-integration)))))
-;;   :config
-;;   ;; query-driver option fetches the compilation symbols from the used compiler
-;;   ;; (No need to retain 2 copies of standard libraries if using gcc)
-;;   (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
-;;         lsp-clangd-binary-path "/usr/bin/clangd"
-;;         +format-with-lsp nil
-;;         lsp-idle-delay 0.1))
-
-;; Eglot for LSP backend
-(use-package! eglot
+;; Language Server Protocol - comprehending the code
+(use-package! lsp-mode
+  :hook ((python-mode . lsp-mode)
+         (c-mode-common . lsp-mode)
+         (lsp-mode . (lambda ()
+                       (let ((lsp-keymap-prefix "C-c l"))
+                         (lsp-enable-which-key-integration)))))
   :config
-  (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"
-                                                    "--header-insertion-decorators=0"
-                                                    "-j=2"
-                                                    "--background-index"
-                                                    "--query-driver=/usr/bin/c++"))))
+  ;; query-driver option fetches the compilation symbols from the used compiler
+  ;; (No need to retain 2 copies of standard libraries if using gcc)
+  (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
+        lsp-clangd-binary-path "/usr/bin/clangd"
+        +format-with-lsp nil
+        lsp-idle-delay 0.1))
+
+;; ;; Eglot for LSP backend
+;; (use-package! eglot
+;;   :config
+;;   (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"
+;;                                                     "--header-insertion-decorators=0"
+;;                                                     "-j=2"
+;;                                                     "--background-index"
+;;                                                     "--query-driver=/usr/bin/c++"))))
 
 ;; Show file structure
 (use-package! treemacs
