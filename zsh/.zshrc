@@ -77,15 +77,16 @@ enable_ros1 (){
 }
 
 enable_ros2 (){
-    for distro in humble foxy
+    for distro in jazzy humble foxy rolling
     do
     if [ -d /opt/ros/$distro ]; then
         source /opt/ros/$distro/setup.zsh && echo "-> ROS2 '$distro' is active"
-        complete -o nospace -o default -F _python_argcomplete "ros2"
+        eval "$(register-python-argcomplete ros2)"
+        eval "$(register-python-argcomplete colcon)"
         return 0
     fi
     done
-    
+
     # No valid candidate found
     echo "-> ROS2 not found"
     return 1
@@ -94,3 +95,7 @@ enable_ros2 (){
 enable_conda() {
     source $HOME/.local/opt/miniconda3/etc/profile.d/conda.sh && echo "-> Conda package management active"
 }
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

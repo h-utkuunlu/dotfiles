@@ -145,10 +145,15 @@
 (setq tramp-verbose 1)
 
 ;; Apheleia formatting
-;; "local" option runs the local formatter, as long as the whole file is not needed
-;; "remote" is blocking, but can utilize existing configurations (i.e. .clang-format)
-;; FIXME(?): Remote clang-format configuration is not respected in "remote"
-(setq apheleia-remote-algorithm "local")
+(use-package! apheleia
+  :custom
+  ;; "local" option runs the local formatter, as long as the whole file is not needed
+  ;; "remote" is blocking, but can utilize existing configurations (i.e. .clang-format)
+  ;; FIXME(?): Remote clang-format configuration is not respected in "remote"
+  (setq apheleia-remote-algorithm "local")
+  ;; Fix beancount formatting. See https://github.com/radian-software/apheleia/pull/310
+  (setf (alist-get 'bean-format apheleia-formatters)
+        '("bean-format" input)))
 
 ;; Org-roam: information linking
 (use-package! org-roam
@@ -339,6 +344,7 @@
   (setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "-j=2" "-background-index" "--query-driver=/usr/bin/c++")
         lsp-clangd-binary-path "/usr/bin/clangd"
         +format-with-lsp nil
+        lsp-pylsp-plugins-flake8-ignore '("D100" "Q000")
         lsp-idle-delay 0.1))
 
 ;; ;; Eglot for LSP backend
